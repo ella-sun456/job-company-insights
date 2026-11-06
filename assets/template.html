@@ -623,6 +623,7 @@ function showSaveToast(html, name, ok){
     '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
       '<button id="st-copy" style="padding:8px 14px;border:0;border-radius:8px;background:#2f6bff;color:#fff;font:600 13px/1 sans-serif;cursor:pointer">复制 HTML 源码</button>' +
       '<button id="st-close" style="padding:8px 14px;border:1px solid #e6e8eb;border-radius:8px;background:#fff;color:#1f2329;font:600 13px/1 sans-serif;cursor:pointer">关闭</button>' +
+      '<div id="st-status" style="margin-top:8px;color:#2f6bff;font-weight:600;min-height:1.2em"></div>' +
     '</div>';
   document.body.appendChild(d);
   var timer = setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 15000);
@@ -636,7 +637,8 @@ function showSaveToast(html, name, ok){
     var done = false;
     try{ done = document.execCommand('copy'); }catch(e){}
     document.body.removeChild(ta);
-    this.textContent = done ? '已复制，粘贴到本地 .html 文件即可' : '复制被拦截，请按 Ctrl+S 保存';
+    var st = document.getElementById('st-status');
+    if(st){ st.textContent = done ? '已复制，粘贴到本地 .html 文件即可' : '复制被拦截，请按 Ctrl+S 保存'; }
   };
 }
 // 兜底：按「来源方式」标签只显示用户实际提供的那一种 JD 来源块（截图/链接/文字）

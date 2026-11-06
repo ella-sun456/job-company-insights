@@ -870,7 +870,7 @@ function showSaveToast(html,name,ok){
   var d=document.createElement('div');
   d.id='save-toast';
   d.style.cssText='position:fixed;right:18px;bottom:18px;max-width:340px;background:#fff;border:1px solid #e6e8eb;border-radius:12px;box-shadow:0 12px 30px rgba(15,25,40,.18);padding:14px 16px;z-index:99;font:13.5px/1.6 -apple-system,\'PingFang SC\',sans-serif;color:#1f2329';
-  d.innerHTML='<div style="font-weight:700;margin-bottom:6px">'+(ok?'已开始下载':'已触发保存')+'</div><div style="color:#5a6573;margin-bottom:10px">文件「'+name+'」。如果浏览器没有任何反应，说明当前是<b>在线预览环境</b>，浏览器禁止网页自动下载——点下面「复制 HTML 源码」，粘贴到本地新建的 .html 文件即可；也可以按 <b>Ctrl+S / ⌘S</b> 保存本页。把文件下载到本地后打开，这个按钮是正常可用的。</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="st-copy" style="padding:8px 14px;border:0;border-radius:8px;background:#2f6bff;color:#fff;font:600 13px/1 sans-serif;cursor:pointer">复制 HTML 源码</button><button id="st-close" style="padding:8px 14px;border:1px solid #e6e8eb;border-radius:8px;background:#fff;color:#1f2329;font:600 13px/1 sans-serif;cursor:pointer">关闭</button></div>';
+  d.innerHTML='<div style="font-weight:700;margin-bottom:6px">'+(ok?'已开始下载':'已触发保存')+'</div><div style="color:#5a6573;margin-bottom:10px">文件「'+name+'」。如果浏览器没有任何反应，说明当前是<b>在线预览环境</b>，浏览器禁止网页自动下载——点下面「复制 HTML 源码」，粘贴到本地新建的 .html 文件即可；也可以按 <b>Ctrl+S / ⌘S</b> 保存本页。把文件下载到本地后打开，这个按钮是正常可用的。</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="st-copy" style="padding:8px 14px;border:0;border-radius:8px;background:#2f6bff;color:#fff;font:600 13px/1 sans-serif;cursor:pointer">复制 HTML 源码</button><button id="st-close" style="padding:8px 14px;border:1px solid #e6e8eb;border-radius:8px;background:#fff;color:#1f2329;font:600 13px/1 sans-serif;cursor:pointer">关闭</button></div><div id="st-status" style="margin-top:8px;color:#2f6bff;font-weight:600;min-height:1.2em"></div>';
   document.body.appendChild(d);
   var timer=setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); },15000);
   document.getElementById('st-close').onclick=function(){ clearTimeout(timer); d.parentNode.removeChild(d); };
@@ -883,7 +883,7 @@ function showSaveToast(html,name,ok){
     var done=false;
     try{ done=document.execCommand('copy'); }catch(e){}
     document.body.removeChild(ta);
-    this.textContent = done ? '已复制，粘贴到本地 .html 文件即可' : '复制被拦截，请按 Ctrl+S 保存';
+    var st=document.getElementById('st-status'); if(st){ st.textContent = done ? '已复制，粘贴到本地 .html 文件即可' : '复制被拦截，请按 Ctrl+S 保存'; }
   };
 }
 </script></body></html>
