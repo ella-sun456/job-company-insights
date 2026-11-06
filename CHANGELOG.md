@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.7 · 2026-11-06
+
+**修复（WorkBuddy 预览里下载静默失败）**
+- 实测：WorkBuddy 预览 iframe 里点「📥 下载 HTML 报告」无任何反应、也不弹失败提示；模板未被改写，按钮与函数都在
+- 根因：iframe 内 `a.click()` 被浏览器/宿主**静默拦截**（不抛异常），原三级策略里 Blob/DataURL 两级都「假装成功」，失败 alert 永远轮不到
+- 修复：下载策略升级为四级——顶层 Blob；iframe 里 DataURL、Blob 连试两次；新增**新标签页逃生通道**（`window.open` 把报告开到真实浏览器标签页，用户手势触发多数环境放行，新标签页里下载必定可用）；弹窗也被拦才弹原定失败 alert
+- 同步范围：`assets/template.html`、`demo/report-demo.html`、`docs/skill-guide.html`、`docs/skill-guide-en.html`、`references/html-spec.md` Download 节、SKILL.md 红线 9、智能体提示词
+- 同步新增（红线 10）：报告**交付后不发散**——不主动起草小红书文案等其他内容，用户没要求就不做
+- 安装包（.skill / .zip）已重建，随 v1.2.7 Release 发布
+
 ## v1.2.6 · 2026-11-06
 
 **新增（安装完成回复模板）**

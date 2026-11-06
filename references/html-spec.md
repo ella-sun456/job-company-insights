@@ -57,10 +57,11 @@ verbatim from `assets/template.html`; only fill content. No external dependencie
 ## Download（下载按钮）
 
 1. 页面内置按钮，文案固定 `📥 下载 HTML 报告`（英文报告为 `📥 Download HTML report`）：顶部工具栏一个 `.btn-dl`，右下角一个 `#dlBtn`，都绑 `onclick="downloadHTML()"`，共用同一套下载逻辑，**不新增任何其他备用按钮**。
-2. `downloadHTML()` 三级策略（必须用模板实现，不得自行改写）：
-   - **优先 Blob**：`URL.createObjectURL` + `a[download]` 唤起浏览器原生下载；
-   - **沙箱自动降级 DataURL**：检测到页面处于沙箱 iframe（`window.self !== window.top` 且 frameElement 缺失或带 `sandbox` 属性）时，改用 `data:text/html;charset=utf-8,` + `encodeURIComponent(html)` 触发；
-   - **全部失败弹出提示**：两级均抛异常时 `alert('⚠️ 当前环境拦截下载，请重新点击下载试试。')`。
+2. `downloadHTML()` 四级策略（必须用模板实现，不得自行改写）：
+   - **顶层页面优先 Blob**：非 iframe 时 `URL.createObjectURL` + `a[download]` 唤起浏览器原生下载；
+   - **iframe 里 DataURL → Blob 连试两次**：检测到页面处于 iframe（`window.self !== window.top`）时，先用 `data:text/html;charset=utf-8,` + `encodeURIComponent(html)` 触发，抛异常再改用 Blob；
+   - **新标签页逃生通道**：iframe 里下载可能被静默拦截（`a.click()` 不抛异常），所以随后必须 `window.open(Blob URL)` 把报告开到真实浏览器标签页——用户手势触发多数环境放行，新标签页里下载必定可用；弹窗成功打开则不再提示；
+   - **全部失败弹出提示**：弹窗也被拦（返回 null）时 `alert('⚠️ 当前环境拦截下载，请重新点击下载试试。')`。
    - 除这条失败 alert 外，**不要「复制 HTML 源码」弹窗，不要二次确认，不要 toast/提示卡**。
 3. 文件名固定 `JD分析报告-【岗位名称】.html`。模板里的 `var JOB_TITLE = '【岗位名称】';` 必须在生成时替换为从 JD 提取的岗位名称（如 `用户研究专家`）；去掉 `()`、`（）`、职级代号，含 `/ \ : * ? " < > |` 的字符替换为 `-`。
 4. 所有 CSS / JS 全部内联，单文件零外链，离线双击即可正常打开与再次导出。

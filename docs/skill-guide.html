@@ -851,22 +851,22 @@ function __dlTrigger(href,name){
 function downloadHTML(){
   var name='FNAME';
   var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
-  var sandboxed=false;
-  try{ sandboxed=(window.self!==window.top)&&(!window.frameElement||window.frameElement.hasAttribute('sandbox')); }
-  catch(e){ sandboxed=(window.self!==window.top); }
-  var done=false;
-  if(!sandboxed){
+  var inFrame=false;
+  try{ inFrame=(window.self!==window.top); }catch(e){ inFrame=true; }
+  if(!inFrame){
     try{
       var url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
       __dlTrigger(url,name);
       setTimeout(function(){ URL.revokeObjectURL(url); },4000);
-      done=true;
-    }catch(e){ done=false; }
+      return;
+    }catch(e){}
+  }else{
+    try{ __dlTrigger('data:text/html;charset=utf-8,'+encodeURIComponent(html),name); }
+    catch(e1){ try{ __dlTrigger(URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),name); }catch(e2){} }
+    var w=null;
+    try{ w=window.open(URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),'_blank'); }catch(e3){ w=null; }
+    if(w&&w!==window){ return; }
+    alert('⚠️ 当前环境拦截下载，请重新点击下载试试。');
   }
-  if(!done){
-    try{ __dlTrigger('data:text/html;charset=utf-8,'+encodeURIComponent(html),name); done=true; }
-    catch(e2){ done=false; }
-  }
-  if(!done){ alert('⚠️ 当前环境拦截下载，请重新点击下载试试。'); }
 }
 </script></body></html>
