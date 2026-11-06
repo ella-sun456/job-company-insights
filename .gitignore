@@ -10,3 +10,6 @@ dist/
 /scripts/
 /share/
 /.screenshots/
+
+# 编辑器临时产物
+/.trae-html-share-packages/
