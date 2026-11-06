@@ -169,7 +169,7 @@ ul{margin:8px 0 8px 20px;line-height:1.8;font-size:.86rem;}
       <div class="score-card"><div class="label">风险等级</div><div class="value">【待填】</div></div>
     </div>
     <div class="toolbar">
-      <button class="btn-dl" onclick="downloadHTML()">⤓ 保存 / 下载 HTML</button>
+      <button class="btn-dl" onclick="downloadHTML()">📥 下载 HTML 报告</button>
       <span class="toolbar-tip">点击即把本报告存为 .html 单文件，浏览器打开即用、无需转换格式</span>
     </div>
   </header>
@@ -578,9 +578,23 @@ ul{margin:8px 0 8px 20px;line-height:1.8;font-size:.86rem;}
 <!-- Lightbox -->
 <div class="lightbox" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt="放大"></div>
 
-<button id="dlBtn" onclick="downloadHTML()" title="保存为 HTML 文件">⤓ 保存 / 下载 HTML</button>
+<button id="dlBtn" onclick="downloadHTML()" title="下载 HTML 报告">📥 下载 HTML 报告</button>
 
 <script>
+var JOB_TITLE = '【岗位名称】';
+function downloadHTML(){
+  var name = 'JD分析报告-' + JOB_TITLE + '.html';
+  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} URL.revokeObjectURL(url); }, 4000);
+}
 function switchTab(e,id){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -590,18 +604,6 @@ function switchTab(e,id){
 function zoomJD(img){
   document.getElementById('lb-img').src=img.src;
   document.getElementById('lb').classList.add('show');
-}
-function downloadHTML(){
-  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = (document.title || 'JD 需求拆解全景报告') + '.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }
 // 兜底：按「来源方式」标签只显示用户实际提供的那一种 JD 来源块（截图/链接/文字）
 function applyJDSource(){

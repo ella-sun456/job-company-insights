@@ -46,13 +46,21 @@ verbatim from `assets/template.html`; only fill content. No external dependencie
 | 竞品矩阵 | Competitor Matrix |
 | 隐藏需求与岗位差异 | Unstated Needs & Role Variance |
 | 结论建议 | Verdict |
-| ⤓ 保存 / 下载 HTML | ⤓ Save / download HTML |
+| 📥 下载 HTML 报告 | 📥 Download HTML report |
 | 待补充 / 待评估 | To be added / Not assessed |
 | 事实·工商 / 推测 | Fact · registry / Inference |
 
 ## Title
 
 `<h1>` = `【公司名称】 - 【岗位名称】JD 需求拆解全景报告`. No serial numbers, no `()`/`（）`.
+
+## Download（下载按钮）
+
+1. 页面内置按钮，文案固定 `📥 下载 HTML 报告`（英文报告为 `📥 Download HTML report`）：顶部工具栏一个 `.btn-dl`，右下角一个 `#dlBtn`，都绑 `onclick="downloadHTML()"`。
+2. `downloadHTML()` 只做一件事：Blob + `a[download]` 直接触发浏览器下载。**不要「复制 HTML 源码」弹窗，不要二次确认，不要 toast/提示卡。**
+3. 文件名固定 `JD分析报告-【岗位名称】.html`。模板里的 `var JOB_TITLE = '【岗位名称】';` 必须在生成时替换为从 JD 提取的岗位名称（如 `用户研究专家`）；去掉 `()`、`（）`、职级代号，含 `/ \ : * ? " < > |` 的字符替换为 `-`。
+4. 所有 CSS / JS 全部内联，单文件零外链，离线双击即可正常打开与再次导出。
+5. 点击后直接弹出浏览器保存窗口。若在 iframe 沙箱预览里被浏览器静默拦截，属于平台限制，不再加兜底弹窗（本地打开一律正常）。
 
 ## Color tokens (CSS variables)
 

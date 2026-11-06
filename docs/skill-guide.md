@@ -136,7 +136,7 @@ AI 在对话中识别到「JD + 公司名 / 面试截图」即按本规范自动
 
 ## 八、HTML 模板（完整可运行 · 含下载按钮）
 
-> 下方为完整单文件 HTML 模板，**已内置「⤓ 保存 / 下载 HTML」按钮**（顶部工具栏 + 右下角浮动按钮）。
+> 下方为完整单文件 HTML 模板，**已内置「📥 下载 HTML 报告」按钮**（顶部工具栏 + 右下角浮动按钮）。
 > 把它连同上面规范一起交给任意 AI，AI 即可按模板直接生成带下载按钮的报告；生成时请勿删除 `downloadHTML()` 函数与 `.btn-dl` / `#dlBtn` 按钮。
 
 ```html
@@ -311,7 +311,7 @@ ul{margin:8px 0 8px 20px;line-height:1.8;font-size:.86rem;}
       <div class="score-card"><div class="label">风险等级</div><div class="value">【待填】</div></div>
     </div>
     <div class="toolbar">
-      <button class="btn-dl" onclick="downloadHTML()">⤓ 保存 / 下载 HTML</button>
+      <button class="btn-dl" onclick="downloadHTML()">📥 下载 HTML 报告</button>
       <span class="toolbar-tip">点击即把本报告存为 .html 单文件，浏览器打开即用、无需转换格式</span>
     </div>
   </header>
@@ -720,7 +720,7 @@ ul{margin:8px 0 8px 20px;line-height:1.8;font-size:.86rem;}
 <!-- Lightbox -->
 <div class="lightbox" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt="放大"></div>
 
-<button id="dlBtn" onclick="downloadHTML()" title="保存为 HTML 文件">⤓ 保存 / 下载 HTML</button>
+<button id="dlBtn" onclick="downloadHTML()" title="保存为 HTML 文件">📥 下载 HTML 报告</button>
 
 <script>
 function switchTab(e,id){

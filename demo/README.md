@@ -6,7 +6,7 @@
 
 **在线直接看**：[▶ 打开 Demo 报告](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/demo/report-demo.html)
 
-**下载后双击**：[下载 report-demo.html](https://github.com/ella-sun456/job-company-insights/raw/main/demo/report-demo.html)，浏览器打开即看；页面右下角有「⤓ 保存 / 下载 HTML」按钮。
+**下载后双击**：[下载 report-demo.html](https://github.com/ella-sun456/job-company-insights/raw/main/demo/report-demo.html)，浏览器打开即看；页面右下角有「📥 下载 HTML 报告」按钮。
 
 > GitHub 网页不会渲染 `.html`（点开只有源码），这是平台行为，用上面两种方式即可。
 
