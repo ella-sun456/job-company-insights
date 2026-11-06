@@ -17,29 +17,28 @@
 
 ---
 
-## 先看一眼
+## 点开就看
 
-> GitHub 网页默认**不会渲染 HTML**（直接点 `.html` 只能看到源码，这是平台行为，不是文件坏了）。想“点开就看”，用下面第一种方式。
+GitHub 网页默认**不会渲染 HTML**（直接点 `.html` 只能看到源码，这是平台行为，不是文件坏了）。下面三个链接走的是在线渲染服务，**点一下直接在浏览器里打开排版好的页面**，不用下载：
 
-**① 在线直接看（推荐，无需下载）**
-[▶ 打开完整 Demo 报告](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/demo/report-demo.html)
-
-**② 下载后双击打开**（浏览器直接渲染，离线也能看）
-
-| 看什么 | 下载链接 |
+| 看什么 | 一点就开 |
 |---|---|
-| 项目主页（图文介绍） | [index.html](https://github.com/ella-sun456/job-company-insights/raw/main/index.html) |
-| 完整 Demo 报告 | [demo/report-demo.html](https://github.com/ella-sun456/job-company-insights/raw/main/demo/report-demo.html) |
-| 技能说明（原理与模块） | [docs/skill-guide.html](https://github.com/ella-sun456/job-company-insights/raw/main/docs/skill-guide.html) |
+| 项目主页（封面 + 流程图 + 6 张截图 + 收益说明） | **[▶ 打开主页](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/index.html)** |
+| 完整 Demo 报告（双 Tab，可切换、可下载） | **[▶ 打开 Demo 报告](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/demo/report-demo.html)** |
+| 技能说明（原理、模块、安装） | **[▶ 打开技能说明](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/docs/skill-guide.html)** |
 
-**③ GitHub Pages（开一次，永久在线）**
-在仓库页面点 **Settings → Pages**，`Source` 选 **Deploy from a branch**，分支选 **main**、目录选 **/ (root)**，点 **Save**。等 30 秒左右，下面三个地址就能直接打开（含图片，不用下载）：
+> 打不开或图片没加载时，等几秒刷新一次（在线渲染服务偶尔慢）；也可以下载到本地双击，效果完全一样。
 
-- `https://ella-sun456.github.io/job-company-insights/`（项目主页）
-- `https://ella-sun456.github.io/job-company-insights/demo/report-demo.html`（Demo 报告）
-- `https://ella-sun456.github.io/job-company-insights/docs/skill-guide.html`（技能说明）
+**下载后双击打开**（离线可看）
 
-> 仓库本身不用改造：`index.html` 在根目录、所有路径都是相对路径，开启后即可访问。
+| 文件 | 下载链接 |
+|---|---|
+| 项目主页 | [index.html](https://github.com/ella-sun456/job-company-insights/raw/main/index.html) |
+| Demo 报告 | [demo/report-demo.html](https://github.com/ella-sun456/job-company-insights/raw/main/demo/report-demo.html) |
+| 技能说明 | [docs/skill-guide.html](https://github.com/ella-sun456/job-company-insights/raw/main/docs/skill-guide.html) |
+
+**换成自己的正式域名（可选，开一次永久生效）**
+在仓库 **Settings → Pages** 里，`Source` 选 **Deploy from a branch**，分支 **main**、目录 **/ (root)**，Save。之后用 `https://ella-sun456.github.io/job-company-insights/` 访问更稳、更快，也不用依赖第三方渲染服务。
 
 ## 这是什么
 
@@ -80,7 +79,7 @@
   <img src="assets/images/preview-06-company.png" width="100%" alt="深度调研看板" />
 </p>
 
-完整效果可以直接打开 **[demo/report-demo.html](demo/report-demo.html)** 看——已脱敏的虚构样例（「星澜宠物」× 用户研究专家岗），双 Tab、下载按钮、各模块都是真的能点的那种。
+完整效果可以 **[▶ 直接打开 Demo 报告](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/demo/report-demo.html)** 看——已脱敏的虚构样例（「星澜宠物」× 用户研究专家岗），双 Tab、下载按钮、各模块都是真的能点的那种。
 
 ## 报告里有哪些东西
 
