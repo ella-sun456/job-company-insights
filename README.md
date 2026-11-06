@@ -42,6 +42,32 @@
 | 公司基本面 + 商业模式 + 竞品 | 它靠什么赚钱？这条业务是主战场还是边缘？ |
 | 隐藏需求 + 可反问问题 + 面经 | 会考什么？面试时该反问哪三个问题？ |
 
+## 报告长什么样（直接看，不用点开）
+
+下面是真实生成的报告截图（Demo 公司为化名「星澜宠物」，版式与真实输出完全一致）：
+
+<div align="center">
+  <p align="center"><b>① 报告头部 · 四卡概览</b></p>
+  <img src="assets/images/preview-01-overview.png" width="88%" alt="Header" />
+  <br/><br/>
+  <p align="center"><b>② JD 原文 + HR 五问</b></p>
+  <img src="assets/images/preview-02-jd-hr.png" width="88%" alt="JD + HR 5 questions" />
+  <br/><br/>
+  <p align="center"><b>③ 目标人才画像卡</b></p>
+  <img src="assets/images/preview-03-persona.png" width="60%" alt="Target persona" />
+  <br/><br/>
+  <p align="center"><b>④ JD 逐条解码（蓝＝明确 / 黄＝推测）</b></p>
+  <img src="assets/images/preview-04-table.png" width="88%" alt="Line-by-line decode" />
+  <br/><br/>
+  <p align="center"><b>⑤ 百分制匹配度 · 四维度拆解</b></p>
+  <img src="assets/images/preview-05-match.png" width="88%" alt="Fit analysis" />
+  <br/><br/>
+  <p align="center"><b>⑥ 公司深度调研看板（右侧 Tab）</b></p>
+  <img src="assets/images/preview-06-company.png" width="88%" alt="Company research dashboard" />
+</div>
+
+> 以上是截图，能直接看到排版和模块。想交互体验（双 Tab 切换、点图放大、右下角下载），点上面「点开就看」里的 Demo 链接。
+
 ## 三条底线
 
 - **防幻觉**：优先一手来源，查不到就写「无法确认」，不编数字。
@@ -78,4 +104,4 @@
 
 本项目在学习公开分享的 AI Skill 写法、岗位分析方法与企业调研案例的基础上整理实践而成；部分早期参考暂无法确认原作者与链接，核实后持续补充（欢迎提 Issue，我立刻补上）。
 
-版本记录见 [CHANGELOG.md](CHANGELOG.md)，当前 **v1.1.2**。
+版本记录见 [CHANGELOG.md](CHANGELOG.md)，当前 **v1.2.0**。
