@@ -1,0 +1,766 @@
+# JD 需求拆解生成 Skill — `jd-requirement-decomposition`
+
+> 一份**可直接分享给其他 AI Agent / 运行时**使用的面试调研技能说明。
+> 配套安装包：`jd-requirement-decomposition.skill`（标准技能包，可直接安装）。
+
+---
+
+## 一、技能定位
+
+| 项 | 内容 |
+|---|---|
+| 角色 | 资深商业尽调分析师 + 前端可视化专家 |
+| 输入 | 目标岗位 **JD**（截图 / 链接 / 文字）+ **公司名称**（可选附**简历**） |
+| 输出 | **单文件、高保真、双 Tab 的 HTML** JD 需求拆解全景报告（JD 透视与匹配 / 深度调研看板） |
+| 适用 | 求职面试准备、岗位与公司调研、候选人匹配度评估 |
+
+核心原则：**真实优先、防幻觉、信息分离（事实 vs 推测）、纯代码输出**。
+
+---
+
+## 二、自动触发规则（核心行为）
+
+1. **JD 图 / 链接即触发调研**
+   只要用户发送了 JD 截图（图片）或 JD 链接，**立即自动调用调研能力**去查公司信息、近期动向与工商事实，**无需用户额外指令**。未给公司名时，优先从截图 / 链接中识别公司名；无法识别再追问。
+
+2. **综合匹配度百分制：有简历才打分，没简历不打分**
+   系统**自动识别** JD 与简历是否齐备，无需用户指令：
+   - **情况一：JD + 简历都已上传** → 系统自动识别到两者都有，**直接走匹配度分析流程，不反问**：
+     1. 头部「综合匹配度」卡输出**百分制总分**（如 `82/100`）；
+     2. 在「逐条匹配分析」下方生成 **📊 综合匹配度维度拆解**：按 `经验 / 技能 / 行业认知 / 岗位层级` 四维度各给分（权重合计 100），列适配点（绿框）与差距点（红框）；
+     3. 全程不反问，直接给结果。
+   - **情况二：只收到 JD、没有简历** → 系统识别到缺简历，**不要硬做匹配度评分**，而是先用**大白话**反问：
+     > 「收到岗位信息了。如果你把简历也传上来，我可以帮你算一个匹配度分数，明确哪些地方你够格、哪些还差一点。光看 JD 的话，只能帮你拆解岗位要求，没法对比你自身的情况——要不要补一份简历？」
+     - 用户**补了简历** → 立刻走情况一完整流程；
+     - 用户**不补** → 只做 JD 拆解（岗位要求、硬性门槛、潜在考察点），**不给任何匹配度分数**；综合匹配度卡、维度拆解、简历依据列、适配/差距点统一标 `待补充` / `待评估`。
+   - **核心原则**：有简历才有匹配度分数，没简历就不打分；提示语用大白话；缺信息先问再干，不瞎猜。
+
+---
+
+## 三、约束红线
+
+1. **防幻觉**：优先使用一手来源（工商信息 / 官网 / 应用商店 / LinkedIn / 权威新闻）。找不到可靠来源直接写「无法确认」，绝不编造任何数字或履历。
+2. **信息分离**：JD 拆解必须区分「JD 明确写出」(蓝) 与「合理推测」(黄)；公司调研必须区分「事实」(蓝·工商) 与「推测」(黄)。
+3. **纯代码输出**：除开头简短说明外，最终输出必须是**完整单文件 HTML**（`<!DOCTYPE html>` + `<style>` + `<script>`），无外部依赖（不引 CDN、外部字体 / 图片）。JD 截图以 `data:image/...;base64,...` 内嵌保持单文件。
+4. **标题动态化**：`<h1>` 必须是 `【公司名称】 - 【岗位名称】JD 需求拆解全景报告`（无序号、无括号）。
+5. **排版极简**：标题中禁止「一、二、零」等序号，禁止中文 / 英文括号 `()` `（）`。
+6. **JD 图 / 链接即触发调研**（见第二节）。
+7. **综合匹配度百分制：有简历才打分**（见第二节，两情况逻辑 + 大白话反问）。
+
+---
+
+## 四、输出规范
+
+- **单文件 HTML**：全部样式与脚本内联，可双击打开，便于分享。
+- **顶部 Header**：灰白渐变，含动态标题、标签行（赛道 / 行业 / 模式 / 阶段）、**4 个数据卡片**：`公司阶段` / `核心赛道` / `综合匹配度`(百分制) / `风险等级`。
+- **双 Tab**：页签文字「JD 透视与匹配」「深度调研看板」，JS `switchTab(event, id)` 无刷新切换，无序号无括号。
+- **标签体系**：`.tag.fact`(蓝=事实·工商/JD明确) / `.tag.infer`(黄=合理推测)。
+- **高亮框**：绿(结论) / 黄(策略) / 红(风险) / 蓝(反问)，均 `border-left:4px solid`。
+- **表格**：`.matrix-table`，表头浅灰、单元格竖线。
+
+---
+
+## 五、工作流与模块结构
+
+### Tab 1 — JD 透视与匹配
+
+| # | 模块 | 要点 |
+|---|---|---|
+| 1 | JD 原文截图 | 左侧卡片，base64 内嵌，点击放大 |
+| 2 | 资深 HR 视角五问 | 右侧卡片（`grid-2` 左右双排）：岗位干什么 / 职责能力特质(蓝JD·黄推测) / 上下游协作图 `.role-map` / 需准备的真实案例 |
+| 3 | HR 终局判断 | 该岗位真正想要的人画像 |
+| 4 | JD 深度解码：他们到底要什么人 | 1 句话 archetype + `grid-2` 两栏「🔧 硬门槛 / 🧠 软特质」+ `.chips` 核心特质与隐藏期待 |
+| 5 | JD 逐条拆解 | `.matrix-table`：`原文摘句 / 类型(硬性·软性·加分) / 解码：他到底要什么 / 标注(蓝JD明确·黄推测)` |
+| 6 | 逐条匹配分析 + 维度拆解 | 表头 `JD要求 / 简历依据 / 匹配度 / gap·风险 / 面试具体策略`；表下 **📊 综合匹配度维度拆解**（经验/技能/行业认知/岗位层级 四维度各给分，权重合计 100，附适配点绿框 + 差距点红框）。无简历则不打分、统一标「待补充 / 待评估」 |
+| 7 | 定制版自我介绍 | ≤250 字填空区 |
+| 8 | Gap 清单 | 红 / 黄 / 绿 + checkbox + 补课建议 |
+| 9 | 面经总结、真题预测与面试行动指南 | 单卡 5 子块：📚 面经总结与真题预测 · ✅ 面试前准备清单 · 🌙 面试前 1 天必做 · 🎯 面试中关键原则(`.chips`) · 🎒 面试当天的准备 |
+
+### Tab 2 — 深度调研看板
+
+| # | 模块 | 要点 |
+|---|---|---|
+| 1 | 公司基本面 | `.info-grid`（全称&成立 / 赛道&背景 / 模式 / 人员规模，工商项标「事实·工商」）+ 卡片内「🎯 近期重点方向（推测）」子块（业务 / 市场 / 组织 + `.hl-yellow` 与岗位匹配度）。生命周期 / 融资 / 营收并入 info-grid 子注 |
+| 2 | 创始人画像 | 姓名行(事实+推测标签) + `.ftl` 时间线（背景旅程 / 关键转折·低谷逆袭）+ `.chips` 价值观 + `.mini-stat` 托底；无法确认项如实标注，低谷缺失转面试反问 |
+| 3 | 商业模式 | `.grid-2` 两卡：盈利逻辑 \| 大客户依赖风险(高则 `.hl-red`) |
+| 4 | 产品与业务线 | 核心 / 主力 / 利润 / 引流 矩阵（每行列一句简注）+ `.hl-blue`「岗位业务线地位」+「📌 主推产品」数据驱动占位（产品/品类/场景·主推定位与打法·渠道·核心卖点）。分类维度不写死电商口径 |
+| 5 | 竞品分析 | 直接 / 间接 / 潜在威胁 优劣势矩阵 |
+| 6 | 隐藏需求与岗位差异 | `.hl-blue` 真实痛点反推 / 同行差异 / 未写明看重 + `.hl-yellow` 面试可反问问题 |
+| 7 | 结论建议 | `.hl-green` 三句话总结 + 机会 / 风险两栏 + 面试展示重点虚线框 |
+
+### 调研优先（Research-First Mandate）
+
+- 收到 JD + 公司名后**先解析 JD**（逐条区分明确 vs 推测），再用一手来源真实调研公司。
+- 所有占位必须换成真实内容；无法确认写「无法确认 / 公开信息未披露」，**严禁把模板占位或编造数字当成品**。
+- **工商九项红线**（成立时间 / 法人 / 注册资本 / 社保人数 / 融资 / 年销售额 / 核心赛道 / 资质 / 工作制）严格标注来源；缺失只标「需面试确认 / 公开信息未披露」。
+
+---
+
+## 六、安装与使用
+
+### 方式一：技能包安装（推荐）
+将 `jd-requirement-decomposition.skill` 交给支持该格式的 AI 运行时 / 技能市场直接安装。
+
+### 方式二：手动放置
+将技能目录放到用户级技能路径：
+```
+~/.codebuddy/skills/jd-requirement-decomposition/
+├── SKILL.md
+├── references/
+│   └── html-spec.md
+└── assets/
+    └── template.html
+```
+AI 在对话中识别到「JD + 公司名 / 面试截图」即按本规范自动调用。
+
+### 文件结构说明
+- **SKILL.md**：角色定义、约束红线、工作流、调研优先指令、初始化话术。
+- **references/html-spec.md**：强制 CSS 规范 + 逐模块数据 schema（颜色 token、高亮框、标签、可视化组件）。
+- **assets/template.html**：完整可运行骨架，含 Header / 双 Tab / 各模块占位与切换脚本。
+
+---
+
+## 七、可移植 / 分享说明（发给其他 AI）
+
+本技能以**标准 `.skill` 包**形式封装，可直接发给其他支持该格式的 AI Agent 运行时安装复用；配套这份说明文档也可**整段贴入任意 AI 对话**，由其按规范重建技能或直接调用。
+
+移植时必须保留的三条底线，确保跨 AI 不失真：
+1. **防幻觉与一手来源优先**——无来源即「无法确认」，不编造。
+2. **信息分离**——事实(蓝) 与 推测(黄) 必须区分标注。
+3. **行为约束**——JD 图/链接自动触发调研；面试截图先判简历（百分制匹配度仅在有简历时给出）。
+
+> 初始化话术：「你好，我是您的面试调研专家。请发送【目标岗位 JD】和【公司名称】，我将为您生成高保真的 HTML JD 需求拆解全景报告。」
+
+
+---
+
+## 八、HTML 模板（完整可运行 · 含下载按钮）
+
+> 下方为完整单文件 HTML 模板，**已内置「⤓ 保存 / 下载 HTML」按钮**（顶部工具栏 + 右下角浮动按钮）。
+> 把它连同上面规范一起交给任意 AI，AI 即可按模板直接生成带下载按钮的报告；生成时请勿删除 `downloadHTML()` 函数与 `.btn-dl` / `#dlBtn` 按钮。
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【公司名称】 - 【岗位名称】 JD 需求拆解全景报告</title>
+<style>
+/*
+  JD 需求拆解 — 蓝白经典报告风（回归确认版）
+  Palette: blue #3b82f6 / ink #0f172a / bg #f8fafc / card #fff
+  Soft borders, 8px radius, gentle shadows. 事实=蓝，推测=黄。
+*/
+:root{
+  --bg:#f8fafc; --card:#ffffff; --ink:#0f172a; --muted:#64748b;
+  --border:#e2e8f0; --blue:#3b82f6; --blue-light:#eff6ff;
+  --yellow:#f59e0b; --yellow-light:#fffbeb; --green:#10b981; --green-light:#ecfdf5;
+  --red:#ef4444; --red-light:#fef2f2; --radius:8px;
+  --shadow-sm:0 1px 3px rgba(15,23,42,.08);
+  --shadow:0 10px 30px rgba(15,23,42,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);line-height:1.6;
+  font-family:'Segoe UI',system-ui,-apple-system,Helvetica,Arial,'PingFang SC','Microsoft YaHei',sans-serif;}
+.container{max-width:1180px;margin:0 auto;padding:28px 18px;}
+
+/* Header */
+.overview-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:28px;margin-bottom:28px;}
+.overview-header h1{font-size:1.5rem;font-weight:800;letter-spacing:-.01em;margin:0 0 14px;color:var(--ink);}
+.tags-row{display:flex;gap:10px;margin:14px 0 20px;flex-wrap:wrap;}
+.header-tag{background:var(--blue);color:#fff;padding:6px 14px;border-radius:6px;font-size:.76rem;font-weight:700;}
+.scorecard{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.score-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px;}
+.score-card .label{font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.score-card .value{font-size:1.2rem;font-weight:800;color:var(--ink);}
+
+/* Tabs */
+.tabs{display:flex;gap:14px;margin-bottom:24px;border-bottom:1px solid var(--border);}
+.tab-btn{padding:12px 22px;border:1px solid var(--border);border-bottom:none;background:var(--card);color:var(--ink);font-size:1rem;font-weight:700;border-radius:8px 8px 0 0;cursor:pointer;}
+.tab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.tab-content{display:none;padding-top:8px;animation:fadeIn .3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px;margin-bottom:22px;}
+.card-title{font-size:1.1rem;font-weight:800;color:var(--blue);margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.sec-h{font-size:1rem;font-weight:800;color:var(--ink);margin:22px 0 12px;padding-left:12px;border-left:4px solid var(--blue);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch;}
+
+/* Tags */
+.tag{font-size:.72rem;padding:3px 10px;border-radius:6px;font-weight:700;display:inline-block;vertical-align:middle;margin-left:4px;background:var(--blue-light);color:var(--blue);}
+.tag.jd{background:var(--blue);color:#fff;}
+.tag.fact{background:var(--blue);color:#fff;}
+.tag.infer,.tag.infer2{background:var(--yellow-light);color:#b45309;}
+.sub-text{font-size:.8rem;color:var(--muted);font-weight:400;display:block;margin-top:8px;line-height:1.6;}
+.sub-label{font-weight:700;color:var(--ink);}
+
+/* JD */
+.jd-shot{border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;background:var(--bg);}
+.jd-shot img{max-width:100%;height:auto;max-height:75vh;object-fit:contain;border:1px solid var(--border);border-radius:6px;cursor:zoom-in;}
+.jd-source-bar{margin:2px 0 14px;display:flex;align-items:center;gap:8px;}
+.jd-box{margin-bottom:16px;}
+.jd-label{font-size:.85rem;font-weight:800;color:var(--blue);margin-bottom:8px;}
+.jd-link-box{border:1px solid var(--border);border-radius:var(--radius);padding:14px;background:var(--blue-light);}
+.jd-link-box a{color:var(--blue);font-weight:600;word-break:break-all;}
+.jd-quote{margin:0;padding:14px 16px;border-left:4px solid var(--blue);background:var(--blue-light);border-radius:0 8px 8px 0;font-size:.88rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;}
+
+/* HR */
+.hr-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.hr-block h4{font-size:.98rem;color:var(--blue);margin:0 0 8px;font-weight:800;}
+.hr-block p{font-size:.88rem;margin:0 0 6px;}
+.role-map{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0;flex-wrap:wrap;}
+.role-node{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.82rem;font-weight:600;flex:1;text-align:center;}
+.role-node.self{background:var(--blue);color:#fff;border-color:var(--blue);}
+.role-arrow{color:var(--blue);font-weight:800;font-size:1.2rem;}
+
+/* Tables */
+.matrix-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.matrix-table th,.matrix-table td{border:1px solid var(--border);padding:11px;font-size:.84rem;vertical-align:middle;}
+.matrix-table th{background:var(--bg);color:var(--ink);font-weight:700;text-align:center;border-bottom:2px solid var(--border);}
+.matrix-table td{background:var(--card);}
+.matrix-table tr:hover td{background:var(--blue-light);}
+
+/* Highlight */
+.hl-green{background:var(--green-light);border:1px solid #a7f3d0;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+.hl-yellow{background:var(--yellow-light);border:1px solid #fde68a;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+.hl-red{background:var(--red-light);border:1px solid #fecaca;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+.hl-blue{background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+
+/* Founder timeline */
+.ftl{list-style:none;margin:6px 0 0;padding:0 0 0 22px;border-left:2px solid var(--border);}
+.ftl-item{position:relative;padding:0 0 14px 14px;}
+.ftl-dot{position:absolute;left:-31px;top:4px;width:16px;height:16px;border-radius:50%;border:2px solid var(--card);background:var(--blue);}
+.ftl-dot.blue{background:var(--blue);}
+.ftl-dot.green{background:var(--green);}
+.ftl-dot.yellow{background:var(--yellow);}
+.ftl-dot.red{background:var(--red);}
+.ftl-title{font-weight:800;font-size:.92rem;color:var(--ink);}
+.ftl-sub{font-size:.82rem;color:var(--muted);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;}
+.chip{font-size:.78rem;padding:5px 12px;border-radius:999px;border:1px solid var(--border);font-weight:600;background:var(--card);color:var(--ink);}
+.chip.blue{background:var(--blue-light);color:var(--blue);border-color:#bfdbfe;}
+.chip.green{background:var(--green-light);color:#047857;border-color:#a7f3d0;}
+.mini-stat{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:.84rem;margin-top:8px;font-weight:600;}
+
+/* Info grid */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.info-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.info-label{font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:4px;}
+.info-value{font-size:.95rem;font-weight:700;color:var(--ink);}
+
+/* Gap */
+.gap{display:block;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius);margin:8px 0;font-size:.86rem;font-weight:600;}
+.gap-red{background:var(--red-light);color:#b91c1c;}
+.gap-yellow{background:var(--yellow-light);color:#b45309;}
+.gap-green{background:var(--green-light);color:#047857;}
+.intro-box{background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--radius);padding:18px;font-size:.92rem;line-height:1.8;}
+
+ul{margin:8px 0 8px 20px;line-height:1.8;font-size:.86rem;}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(15,23,42,.9);display:none;align-items:center;justify-content:center;z-index:999;cursor:zoom-out;}
+.lightbox img{max-width:92vw;max-height:92vh;border-radius:8px;border:1px solid var(--border);}
+.lightbox.show{display:flex;}
+
+@media(max-width:768px){.scorecard,.grid-2,.info-grid,.role-map{grid-template-columns:1fr;flex-direction:column;}.role-arrow{transform:rotate(90deg);}}
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 0;}
+.btn-dl{background:var(--blue);color:#fff;border:none;border-radius:8px;box-shadow:var(--shadow-sm);padding:11px 18px;font-size:.9rem;font-weight:700;cursor:pointer;}
+.btn-dl:hover{background:#2563eb;}
+.toolbar-tip{color:var(--muted);font-size:.76rem;}
+
+/* 人才画像卡 */
+.comp-list{margin:6px 0;}
+.comp-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:.86rem;}
+.comp-name{width:90px;flex:none;font-weight:700;color:var(--ink);}
+.comp-track{flex:1;height:14px;background:var(--bg);border:1px solid var(--border);border-radius:999px;overflow:hidden;}
+.comp-track i{display:block;height:100%;background:var(--blue);}
+.comp-val{width:66px;flex:none;text-align:right;color:var(--muted);font-size:.8rem;font-weight:700;}
+.persona-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px;}
+.persona-col{border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-size:.82rem;background:var(--card);}
+.persona-col.ideal{background:var(--green-light);}
+.persona-col.ok{background:var(--card);}
+.persona-col.bad{background:var(--red-light);color:#7f1d1d;}
+.persona-col.bad h5{color:#7f1d1d;}
+.persona-col h5{margin:0 0 8px;font-size:.95rem;font-weight:800;color:var(--ink);}
+.persona-col ul{margin:4px 0 0 16px;line-height:1.6;}
+@media(max-width:768px){.persona-3{grid-template-columns:1fr;}}
+
+#dlBtn{position:fixed;right:20px;bottom:24px;height:48px;padding:0 18px;border:none;border-radius:8px;background:var(--blue);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);z-index:99;}
+#dlBtn:hover{background:#2563eb;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== Header（动态标题：公司名 - 岗位名 JD 需求拆解全景报告） ===== -->
+  <header class="overview-header">
+    <h1>【公司名称】 - 【岗位名称】 JD 需求拆解全景报告</h1>
+    <div class="tags-row">
+      <span class="header-tag">赛道：【待填】</span>
+      <span class="header-tag">行业：【待填】</span>
+      <span class="header-tag">模式：【待填】</span>
+      <span class="header-tag">阶段：【待填】</span>
+    </div>
+    <div class="scorecard">
+      <div class="score-card"><div class="label">公司阶段</div><div class="value">【待填】</div></div>
+      <div class="score-card"><div class="label">核心赛道</div><div class="value">【待填】</div></div>
+      <div class="score-card"><div class="label">综合匹配度</div><div class="value">待评估</div></div>
+      <div class="score-card"><div class="label">风险等级</div><div class="value">【待填】</div></div>
+    </div>
+    <div class="toolbar">
+      <button class="btn-dl" onclick="downloadHTML()">⤓ 保存 / 下载 HTML</button>
+      <span class="toolbar-tip">点击即把本报告存为 .html 单文件，浏览器打开即用、无需转换格式</span>
+    </div>
+  </header>
+
+  <!-- ===== Tabs ===== -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'phase1')">JD 透视与匹配</button>
+    <button class="tab-btn" onclick="switchTab(event,'phase2')">深度调研看板</button>
+  </div>
+
+  <!-- ============ 第一阶段：JD 透视与匹配 ============ -->
+  <div id="phase1" class="tab-content active">
+
+    <!-- JD 原图（左） + HR五问（右） -->
+    <div class="grid-2">
+      <div class="card">
+                <div class="card-title">JD 原文与来源</div>
+        <!-- ⚠ 生成必做：先判断用户本次提供的 JD 是「截图 / 链接 / 文字」哪一种，只保留对应的 .jd-box 块，整段删除其余两个 .jd-box 块，并在「来源方式」标签写清实际方式。三种来源视觉样式不同，不可混用。 -->
+        <div class="jd-source-bar">
+          <span class="sub-label">来源方式：</span>
+          <span class="tag jd">【填写：截图 / 链接 / 文字】</span>
+        </div>
+
+        <!-- 情况A：用户提供「JD 截图」→ 只保留本块，删除 .jd-link / .jd-text -->
+        <div class="jd-box jd-img">
+          <div class="jd-label">📷 JD 截图</div>
+          <div class="jd-shot">
+            <!-- 将用户截图以 base64 内嵌到 <img src>，保证单文件自包含；不要使用外链或本地相对路径 -->
+            <img src="data:image/png;base64,【在此粘贴截图 base64 编码】" alt="岗位JD原始截图" onclick="zoomJD(this)">
+          </div>
+        </div>
+
+        <!-- 情况B：用户提供「JD 链接」→ 只保留本块，删除 .jd-img / .jd-text -->
+        <div class="jd-box jd-link">
+          <div class="jd-label">🔗 JD 链接</div>
+          <div class="jd-link-box">
+            <a href="【用户输入的 JD URL】" target="_blank" rel="noopener">【JD 标题 / 链接地址】</a>
+          </div>
+        </div>
+
+        <!-- 情况C：用户提供「JD 文字」→ 只保留本块，删除 .jd-img / .jd-link -->
+        <div class="jd-box jd-text">
+          <div class="jd-label">📝 JD 文字</div>
+          <blockquote class="jd-quote">【在此粘贴 JD 原文全文】</blockquote>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">资深 HR 视角 JD 深度解读五问</div>
+        <div class="hr-block">
+          <h4>1. 岗位主要在做什么、解决什么问题？</h4>
+          <p><strong>白话：</strong>【待填：用一句话说清这个岗位在业务里补哪条链路】</p>
+        </div>
+        <div class="hr-block">
+          <h4>2. 最重要的职责、能力与特质</h4>
+          <p><span class="tag jd">JD 明确</span> 【待填】</p>
+          <p><span class="tag infer">合理推测</span> 【待填】</p>
+        </div>
+        <div class="hr-block">
+          <h4>3 & 4. 对接对象与业务基本逻辑</h4>
+          <p>【待填：岗位在业务中的枢纽定位】</p>
+          <div class="role-map">
+            <div class="role-node">上游：【待填】<br><span class="sub-text">【待填】</span></div>
+            <div class="role-arrow">➔</div>
+            <div class="role-node self">你：【岗位】<br><span class="sub-text">【待填】</span></div>
+            <div class="role-arrow">➔</div>
+            <div class="role-node">下游：【待填】<br><span class="sub-text">【待填】</span></div>
+          </div>
+        </div>
+        <div class="hr-block" style="margin-bottom:0;background:var(--blue-light);border-color:var(--blue)">
+          <h4>5. 需准备的真实案例</h4>
+          <p><strong>扛指标：</strong>【待填】</p>
+          <p><strong>跨部门：</strong>【待填】</p>
+          <p><strong>抗压破局：</strong>【待填】</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JD 深度解码：他们到底要什么人 -->
+    <div class="card">
+      <div class="card-title">JD 深度解码：他们到底要什么人</div>
+      <div class="hr-block" style="margin-bottom:14px">
+        <p style="font-size:.92rem;line-height:1.8"><b>一句话画像：</b>【待填：这类岗位真正在找的 archetype，例如「能扛增长指标的操盘手，而非只做执行的执行者」】</p>
+      </div>
+      <div class="grid-2" style="margin-bottom:12px">
+        <div class="mini-stat"><b>🔧 硬门槛：</b>【待填：学历/经验/工具/证书等硬性要求】</div>
+        <div class="mini-stat"><b>🧠 软特质：</b>【待填：抗压/自驱/沟通/业务感等】</div>
+      </div>
+      <div class="chips">
+        <span class="chip blue">【核心特质1】</span><span class="chip blue">【核心特质2】</span>
+        <span class="chip green">【隐藏期待1】</span><span class="chip green">【隐藏期待2】</span>
+      </div>
+    </div>
+
+    <!-- 目标人才画像卡 -->
+    <div class="card">
+      <div class="card-title">🎯 目标人才画像卡</div>
+      <div class="hr-block" style="margin-bottom:16px">
+        <p style="font-size:.94rem;line-height:1.9"><b>一句话 archetype：</b>【待填：用 1 句人话概括这个岗位真正在找的"那种人"，例如「能扛增长指标、敢拍板的业务操盘手，而非只做执行的执行者」】</p>
+      </div>
+      <div class="grid-2" style="align-items:start">
+        <div>
+          <div class="sub-label" style="margin-bottom:8px">胜任力模型（权重 / 等级）</div>
+          <div class="comp-list">
+            <div class="comp-row"><span class="comp-name">业务操盘</span><span class="comp-track"><i style="width:90%"></i></span><span class="comp-val">必需·高</span></div>
+            <div class="comp-row"><span class="comp-name">数据驱动</span><span class="comp-track"><i style="width:75%"></i></span><span class="comp-val">必需·中高</span></div>
+            <div class="comp-row"><span class="comp-name">跨协推动</span><span class="comp-track"><i style="width:65%"></i></span><span class="comp-val">加分·中</span></div>
+            <div class="comp-row"><span class="comp-name">抗压破局</span><span class="comp-track"><i style="width:80%"></i></span><span class="comp-val">必需·高</span></div>
+            <div class="comp-row"><span class="comp-name">行业认知</span><span class="comp-track"><i style="width:60%"></i></span><span class="comp-val">加分·中</span></div>
+          </div>
+          <span class="sub-text">条宽＝该能力在岗位中的权重；「必需」来自 JD 明确，「加分」为合理推测（黄）。</span>
+        </div>
+        <div>
+          <div class="sub-label" style="margin-bottom:8px">理想 vs 雷区</div>
+          <div class="hl-green"><b>✅ 理想候选人：</b>【待填：1-2 句，命中画像核心特质的表现】</div>
+          <div class="hl-red" style="margin-top:10px"><b>⛔ 雷区候选人：</b>【待填：1-2 句，最容易被刷掉的表现，如只执行不思考、数据感弱】</div>
+        </div>
+      </div>
+      <div class="sub-label" style="margin:18px 0 6px">三类候选 archetype 对比</div>
+      <div class="persona-3">
+        <div class="persona-col ideal">
+          <h5>🌟 理想型</h5>
+          <ul>
+            <li>【待填：核心特征1】</li>
+            <li>【待填：核心特征2】</li>
+            <li>【待填：能带来的价值】</li>
+          </ul>
+        </div>
+        <div class="persona-col ok">
+          <h5>🟡 及格型</h5>
+          <ul>
+            <li>【待填：具备基础能力但缺亮点】</li>
+            <li>【待填：需带教/培养的部分】</li>
+          </ul>
+        </div>
+        <div class="persona-col bad">
+          <h5>🔴 雷区型</h5>
+          <ul>
+            <li>【待填：典型硬伤1】</li>
+            <li>【待填：典型硬伤2】</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- JD 逐条拆解 -->
+    <div class="card">
+      <div class="card-title">JD 逐条拆解</div>
+      <table class="matrix-table">
+        <thead><tr><th>原文摘句</th><th>类型</th><th>解码：他到底要什么</th><th>标注</th></tr></thead>
+        <tbody>
+          <tr><td>【待填：JD 原话】</td><td>【硬性/软性/加分】</td><td>【待填：解码其真实意图】</td><td><span class="tag jd">JD明确</span></td></tr>
+          <tr><td>【待填】</td><td>【待填】</td><td>【待填：推测其真实意图】</td><td><span class="tag infer">合理推测</span></td></tr>
+        </tbody>
+      </table>
+      <span class="sub-text"><span class="sub-label">标注：</span>蓝＝JD明确写出，黄＝对其真实意图的合理推测。</span>
+    </div>
+
+    <!-- HR 终局判断 -->
+    <div class="card">
+      <div class="card-title">HR 终局判断：你到底是不是对的人</div>
+      <div class="hr-block" style="margin-bottom:0;border-left:4px solid var(--blue)">
+        <p style="font-size:.92rem;line-height:1.8">【待填：用 1-3 条写清这个岗位真正想要的人画像，避免只写表面职责。】</p>
+      </div>
+    </div>
+
+    <!-- 逐条匹配分析表 -->
+    <div class="card">
+      <div class="card-title">逐条匹配分析 简历 vs JD</div>
+      <table class="matrix-table">
+        <thead><tr><th>JD 要求</th><th>简历依据</th><th>匹配度</th><th>gap / 风险</th><th>面试具体策略</th></tr></thead>
+        <tbody>
+          <tr><td>【待填】</td><td>【待填】</td><td style="text-align:center;font-weight:700">【待填】</td><td>【待填】</td><td>【待填】</td></tr>
+        </tbody>
+      </table>
+      <span class="sub-text"><span class="sub-label">说明：</span>若无简历，简历依据列留【待填】；匹配度可标「待评估」。</span>
+
+      <h4 class="sec-h" style="margin-top:18px">📊 综合匹配度维度拆解（百分制）</h4>
+      <table class="matrix-table">
+        <thead><tr><th>维度</th><th>得分</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>经验匹配</td><td style="text-align:center;font-weight:700">【待填】/25</td><td>【待填：相关年限/项目经验与 JD 的吻合度】</td></tr>
+          <tr><td>技能匹配</td><td style="text-align:center;font-weight:700">【待填】/25</td><td>【待填：硬技能/工具/方法论掌握度】</td></tr>
+          <tr><td>行业认知</td><td style="text-align:center;font-weight:700">【待填】/25</td><td>【待填：对赛道/公司/竞品的理解深度】</td></tr>
+          <tr><td>岗位层级匹配</td><td style="text-align:center;font-weight:700">【待填】/25</td><td>【待填：职级/管理幅度/决策权匹配度】</td></tr>
+        </tbody>
+      </table>
+      <div class="hl-green" style="margin-top:10px"><b>适配点：</b>【待填：与岗位高度契合的 2-3 条】</div>
+      <div class="hl-red" style="margin-top:8px"><b>差距点：</b>【待填：需补课或面试重点解释的 1-2 条】</div>
+      <span class="sub-text"><span class="sub-label">规则：</span>仅当用户已上传简历时生成此块（四维度得分合计＝头部百分制总分）；无简历则整块替换为「待补充（上传简历后自动生成）」，不打分、不猜测个人情况。</span>
+    </div>
+
+    <!-- 定制版自我介绍 -->
+    <div class="card">
+      <div class="card-title">定制版自我介绍（≤250 字）</div>
+      <div class="intro-box"><p>【待填：定制一段 250 字以内口语化自我介绍，扣住 JD 关键词。】</p></div>
+    </div>
+
+    <!-- Gap 清单 -->
+    <div class="card">
+      <div class="card-title">Gap 清单（按优先级）</div>
+      <div class="gap gap-red"><input type="checkbox" style="margin-right:8px"><b>红·高优先级：</b>【待填：补课建议】</div>
+      <div class="gap gap-yellow"><input type="checkbox" style="margin-right:8px"><b>黄·中优先级：</b>【待填】</div>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right:8px"><b>绿·低优先级：</b>【待填】</div>
+    </div>
+
+    <!-- 面经总结、真题预测与面试行动指南 -->
+    <div class="card">
+      <div class="card-title">面经总结、真题预测与面试行动指南</div>
+
+      <h4 class="sec-h">📚 面经总结与真题预测</h4>
+      <div class="hl-yellow"><b>平台 / 关键词：</b>【待填：牛客/看准/小红书/脉脉 + 关键词】</div>
+      <div style="background:#f8fafc;padding:14px;border-radius:8px;margin-top:12px">
+        <p style="font-size:.86rem"><b>高频真题信号：</b></p>
+        <ul><li>【待填】</li></ul>
+      </div>
+
+      <h4 class="sec-h" style="margin-top:18px">✅ 面试前准备清单</h4>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right:8px">【待填：案例/作品集准备】</div>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right:8px">【待填：自我介绍演练】</div>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right:8px">【待填：JD 关键词复盘】</div>
+
+      <h4 class="sec-h" style="margin-top:18px">🌙 面试前 1 天必做</h4>
+      <ul>
+        <li>【待填：路线/设备/资料确认】</li>
+        <li>【待填：复盘 3 个核心案例】</li>
+        <li>【待填：反问清单定稿】</li>
+      </ul>
+
+      <h4 class="sec-h" style="margin-top:18px">🎯 面试中关键原则</h4>
+      <div class="chips">
+        <span class="chip blue">【原则1：用数据说话】</span>
+        <span class="chip blue">【原则2：先结论后展开】</span>
+        <span class="chip green">【原则3：经历对齐 JD】</span>
+      </div>
+
+      <h4 class="sec-h" style="margin-top:18px">🎒 面试当天的准备</h4>
+      <ul>
+        <li>【待填：物料：简历/作品/证件】</li>
+        <li>【待填：提前到场/上线】</li>
+        <li>【待填：状态调节】</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 第二阶段：深度调研看板 ============ -->
+  <div id="phase2" class="tab-content">
+
+    <!-- 公司基本面 -->
+    <div class="card">
+      <div class="card-title">公司基本面</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">公司全称 & 成立时间</div>
+          <div class="info-value">【待填】<br>
+            <span class="sub-text"><span class="sub-label">成立：</span>【待填】<span class="tag fact">事实·工商</span></span>
+            <span class="sub-text"><span class="sub-label">总部：</span>【待填】</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">所属赛道 & 背景类型</div>
+          <div class="info-value">【待填】<br>
+            <span class="sub-text"><span class="sub-label">背景：</span>【待填】</span>
+            <span class="sub-text"><span class="sub-label">资方：</span>【待填】</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">商业模式</div>
+          <div class="info-value">【待填】<br><span class="sub-text">【待填】</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">人员规模</div>
+          <div class="info-value">【待填】<span class="tag fact">事实·工商</span><br>
+            <span class="sub-text"><span class="sub-label">生命周期：</span>【待填】</span>
+          </div>
+        </div>
+      </div>
+
+      <h4 class="sec-h" style="margin-top:20px">🎯 近期重点方向（推测）</h4>
+      <ul>
+        <li><b>业务：</b>【待填】</li>
+        <li><b>市场：</b>【待填】</li>
+        <li><b>组织：</b>【待填】</li>
+      </ul>
+      <div class="hl-yellow" style="margin-top:8px"><b>与岗位匹配度：</b>【待填】</div>
+    </div>
+
+    <!-- 创始人画像（时间线可视化） -->
+    <div class="card">
+      <div class="card-title">创始人画像</div>
+      <p style="margin-bottom:14px"><b>姓名：</b>【待填】<span class="tag fact">事实·工商</span><span class="tag infer2">实控人身份为推测</span></p>
+      <div class="grid-2">
+        <div>
+          <h4 style="margin:0 0 8px">🧭 背景与旅程</h4>
+          <ul class="ftl">
+            <li class="ftl-item"><span class="ftl-dot blue"></span><span class="ftl-title">【年】</span><span class="ftl-sub"> 【待填：事实·工商】</span></li>
+            <li class="ftl-item"><span class="ftl-dot green"></span><span class="ftl-title">【年】</span><span class="ftl-sub"> 【待填：推测】</span></li>
+          </ul>
+          <div class="mini-stat">【待填：关联/连续创业、个人履历；无法确认则如实标注。】</div>
+        </div>
+        <div>
+          <h4 style="margin:0 0 8px">⚡ 关键转折 · 低谷与逆袭</h4>
+          <ul class="ftl">
+            <li class="ftl-item"><span class="ftl-dot yellow"></span><span class="ftl-title">【转折】</span><span class="ftl-sub"> 【待填】</span></li>
+            <li class="ftl-item"><span class="ftl-dot green"></span><span class="ftl-title">【升级】</span><span class="ftl-sub"> 【待填】</span></li>
+            <li class="ftl-item"><span class="ftl-dot red"></span><span class="ftl-title">低谷与逆袭</span><span class="ftl-sub"> 【待填：无法确认则转面试反问素材】</span></li>
+          </ul>
+          <div class="mini-stat">【待填：风险/口碑信号，单源标注推测。】</div>
+        </div>
+      </div>
+      <h4 style="margin:18px 0 8px">🧠 核心经营哲学与战略眼光</h4>
+      <div class="chips">
+        <span class="chip blue">【价值观1】</span><span class="chip blue">【价值观2】</span>
+        <span class="chip green">【战略表述1】</span><span class="chip green">【战略表述2】</span>
+      </div>
+      <div class="grid-2" style="margin-top:6px">
+        <div class="mini-stat"><b>💡 最大杠杆点：</b>【待填：官方原话对本岗位意味着什么】</div>
+        <div class="mini-stat"><b>🔍 待验证：</b>【待填：宣传口径与可查数据之间的矛盾点】</div>
+      </div>
+      <span class="sub-text">官方自述原话来源：【待填】；下方解读为推测。</span>
+    </div>
+
+    <!-- 商业模式 -->
+    <div class="grid-2">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">商业模式（怎么赚钱）</div>
+        <p style="font-size:.88rem"><b>主要客户：</b>【待填】<span class="tag infer2">推测</span></p>
+        <p style="font-size:.88rem"><b>怎么赚钱：</b>【待填】</p>
+        <p style="font-size:.88rem"><b>依赖资源：</b>【待填】</p>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">大客户依赖风险</div>
+        <div class="hl-red" style="margin:0"><b>风险：【高/中/低】。</b>【待填：依赖点 + 影响 + 行业数据支撑】</div>
+      </div>
+    </div>
+
+    <!-- 产品与业务线 -->
+    <div class="card">
+      <div class="card-title">产品与业务线</div>
+      <table class="matrix-table">
+        <thead><tr><th>类型</th><th>代表方向</th><th>定位</th><th>与【岗位】的关系</th></tr></thead>
+        <tbody>
+          <tr><td>核心</td><td>【待填】</td><td>【待填】</td><td>【待填一句话】</td></tr>
+          <tr><td>主力</td><td>【待填】</td><td>【待填】</td><td>【待填】</td></tr>
+          <tr><td>利润</td><td>【待填】</td><td>【待填】</td><td>【待填】</td></tr>
+          <tr><td>引流</td><td>【待填】</td><td>【待填】</td><td>【待填】</td></tr>
+        </tbody>
+      </table>
+      <div class="hl-blue">
+        <b>岗位业务线地位：</b>【待填：本岗位所在业务线及其阶段/战略地位 + 面试行动提示。】
+      </div>
+      <span class="sub-text"><span class="sub-label">说明：</span>具体品类为基于赛道与行业趋势的推测；公司未公开产品清单则标注「无法确认」。</span>
+
+      <h4 class="sec-h">📌 主推产品（当前重点销售 & 推广）</h4>
+      <table class="matrix-table">
+        <thead><tr><th>产品 / 品类 / 场景</th><th>主推定位与打法</th><th>渠道</th><th>核心卖点</th></tr></thead>
+        <tbody><tr><td>【待填】</td><td>【待填】</td><td>【待填】</td><td>【待填】</td></tr></tbody>
+      </table>
+      <span class="sub-text"><span class="sub-label">数据驱动：</span>以上为示意样例（示例数字标注「示意·待真实数据」），非公司已披露事实；接入真实销售数据后替换带「待填」单元格即可。分类维度不写死电商口径，优先按实际品类/功能/用户类型/场景/价格带；多子品牌按子品牌分组；无某项可省略。</span>
+    </div>
+
+    <!-- 竞品分析 -->
+    <div class="card">
+      <div class="card-title">竞品分析矩阵</div>
+      <table class="matrix-table">
+        <thead><tr><th>类型</th><th>代表</th><th>优劣势</th></tr></thead>
+        <tbody>
+          <tr><td><b>直接</b></td><td>【待填】</td><td>【待填】</td></tr>
+          <tr><td><b>间接</b></td><td>【待填】</td><td>【待填】</td></tr>
+          <tr><td><b>潜在威胁</b></td><td>【待填】</td><td>【待填】</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 隐藏需求与岗位差异 -->
+    <div class="card" style="border:none;background:transparent;box-shadow:none;padding:0">
+      <div class="hl-blue" style="background:var(--blue-light);border-left:4px solid var(--blue);margin-bottom:18px">
+        <h4 style="margin:0 0 8px">🎯 隐藏需求与岗位差异性</h4>
+        <p style="font-size:.88rem"><b>真实痛点反推：</b>【待填】</p>
+        <p style="font-size:.88rem;margin-top:6px"><b>同行岗位差异：</b>【待填】</p>
+        <p style="font-size:.88rem;margin-top:6px"><b>未写明的看重：</b>【待填】</p>
+      </div>
+      <div class="hl-yellow" style="margin-bottom:18px">
+        <h4 style="color:var(--yellow);margin:0 0 8px">💡 面试可反问问题</h4>
+        <p style="font-size:.88rem">1. 【待填】<br>2. 【待填】<br>3. 【待填】</p>
+      </div>
+    </div>
+
+    <!-- 结论建议 -->
+    <div class="card">
+      <div class="card-title">结论与求职建议</div>
+      <div class="hl-green">
+        <p style="font-size:.9rem;margin-bottom:12px"><b>三句话总结：</b>【待填】</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:.86rem">
+          <div style="background:var(--green-light);padding:14px;border-radius:8px;border:1px solid #a7f3d0"><b>🚀 三个机会：</b><br>1. 【待填】<br>2. 【待填】<br>3. 【待填】</div>
+          <div style="background:var(--red-light);padding:14px;border-radius:8px;border:1px solid #fecaca"><b>⚠️ 三个风险：</b><br>1. 【待填】<br>2. 【待填】<br>3. 【待填】</div>
+        </div>
+        <div style="margin-top:12px;background:#fff;padding:14px;border-radius:8px;border:1px dashed #6ee7b7;font-size:.86rem">
+          <b>🎯 面试展示重点：</b>【待填】
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt="放大"></div>
+
+<button id="dlBtn" onclick="downloadHTML()" title="保存为 HTML 文件">⤓ 保存 / 下载 HTML</button>
+
+<script>
+function switchTab(e,id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+function zoomJD(img){
+  document.getElementById('lb-img').src=img.src;
+  document.getElementById('lb').classList.add('show');
+}
+function downloadHTML(){
+  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = (document.title || 'JD 需求拆解全景报告') + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+// 兜底：按「来源方式」标签只显示用户实际提供的那一种 JD 来源块（截图/链接/文字）
+function applyJDSource(){
+  var tag = document.querySelector('.jd-source-bar .tag.jd');
+  if(!tag) return;
+  var t = (tag.textContent||'').trim();
+  var map = [['截图','jd-img'],['链接','jd-link'],['文字','jd-text']];
+  var matched = map.filter(function(k){ return t.indexOf(k[0])>=0; });
+  if(matched.length !== 1) return;
+  var show = matched[0][1];
+  document.querySelectorAll('.jd-box').forEach(function(b){
+    b.style.display = b.classList.contains(show) ? '' : 'none';
+  });
+}
+applyJDSource();
+
+</script>
+</body>
+</html>
+```

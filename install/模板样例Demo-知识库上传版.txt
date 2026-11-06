@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星澜宠物（化名） - 用户研究专家 JD 需求拆解全景报告</title>
+<style>
+/*
+  JD 需求拆解 — 蓝白经典报告风（回归确认版）
+  Palette: blue #3b82f6 / ink #0f172a / bg #f8fafc / card #fff
+  Soft borders, 8px radius, gentle shadows. 事实=蓝，推测=黄。
+*/
+:root{
+  --bg:#f8fafc; --card:#ffffff; --ink:#0f172a; --muted:#64748b;
+  --border:#e2e8f0; --blue:#3b82f6; --blue-light:#eff6ff;
+  --yellow:#f59e0b; --yellow-light:#fffbeb; --green:#10b981; --green-light:#ecfdf5;
+  --red:#ef4444; --red-light:#fef2f2; --radius:8px;
+  --shadow-sm:0 1px 3px rgba(15,23,42,.08);
+  --shadow:0 10px 30px rgba(15,23,42,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);line-height:1.6;
+  font-family:'Segoe UI',system-ui,-apple-system,Helvetica,Arial,'PingFang SC','Microsoft YaHei',sans-serif;}
+.container{max-width:1180px;margin:0 auto;padding:28px 18px;}
+
+/* Header */
+.overview-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:28px;margin-bottom:28px;}
+.overview-header h1{font-size:1.5rem;font-weight:800;letter-spacing:-.01em;margin:0 0 14px;color:var(--ink);}
+.tags-row{display:flex;gap:10px;margin:14px 0 20px;flex-wrap:wrap;}
+.header-tag{background:var(--blue);color:#fff;padding:6px 14px;border-radius:6px;font-size:.76rem;font-weight:700;}
+.scorecard{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.score-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px;}
+.score-card .label{font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.score-card .value{font-size:1.2rem;font-weight:800;color:var(--ink);}
+
+/* Tabs */
+.tabs{display:flex;gap:14px;margin-bottom:24px;border-bottom:1px solid var(--border);}
+.tab-btn{padding:12px 22px;border:1px solid var(--border);border-bottom:none;background:var(--card);color:var(--ink);font-size:1rem;font-weight:700;border-radius:8px 8px 0 0;cursor:pointer;}
+.tab-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.tab-content{display:none;padding-top:8px;animation:fadeIn .3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px;margin-bottom:22px;}
+.card-title{font-size:1.1rem;font-weight:800;color:var(--blue);margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.sec-h{font-size:1rem;font-weight:800;color:var(--ink);margin:22px 0 12px;padding-left:12px;border-left:4px solid var(--blue);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch;}
+
+/* Tags */
+.tag{font-size:.72rem;padding:3px 10px;border-radius:6px;font-weight:700;display:inline-block;vertical-align:middle;margin-left:4px;background:var(--blue-light);color:var(--blue);}
+.tag.jd{background:var(--blue);color:#fff;}
+.tag.fact{background:var(--blue);color:#fff;}
+.tag.infer,.tag.infer2{background:var(--yellow-light);color:#b45309;}
+.sub-text{font-size:.8rem;color:var(--muted);font-weight:400;display:block;margin-top:8px;line-height:1.6;}
+.sub-label{font-weight:700;color:var(--ink);}
+
+/* JD */
+.jd-shot{border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;background:var(--bg);}
+.jd-shot img{max-width:100%;height:auto;max-height:75vh;object-fit:contain;border:1px solid var(--border);border-radius:6px;cursor:zoom-in;}
+.jd-source-bar{margin:2px 0 14px;display:flex;align-items:center;gap:8px;}
+.jd-box{margin-bottom:16px;}
+.jd-label{font-size:.85rem;font-weight:800;color:var(--blue);margin-bottom:8px;}
+.jd-link-box{border:1px solid var(--border);border-radius:var(--radius);padding:14px;background:var(--blue-light);}
+.jd-link-box a{color:var(--blue);font-weight:600;word-break:break-all;}
+.jd-quote{margin:0;padding:14px 16px;border-left:4px solid var(--blue);background:var(--blue-light);border-radius:0 8px 8px 0;font-size:.88rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;}
+
+/* HR */
+.hr-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.hr-block h4{font-size:.98rem;color:var(--blue);margin:0 0 8px;font-weight:800;}
+.hr-block p{font-size:.88rem;margin:0 0 6px;}
+.role-map{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0;flex-wrap:wrap;}
+.role-node{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.82rem;font-weight:600;flex:1;text-align:center;}
+.role-node.self{background:var(--blue);color:#fff;border-color:var(--blue);}
+.role-arrow{color:var(--blue);font-weight:800;font-size:1.2rem;}
+
+/* Tables */
+.matrix-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.matrix-table th,.matrix-table td{border:1px solid var(--border);padding:11px;font-size:.84rem;vertical-align:middle;}
+.matrix-table th{background:var(--bg);color:var(--ink);font-weight:700;text-align:center;border-bottom:2px solid var(--border);}
+.matrix-table td{background:var(--card);}
+.matrix-table tr:hover td{background:var(--blue-light);}
+
+/* Highlight */
+.hl-green{background:var(--green-light);border:1px solid #a7f3d0;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+.hl-yellow{background:var(--yellow-light);border:1px solid #fde68a;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+.hl-red{background:var(--red-light);border:1px solid #fecaca;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+.hl-blue{background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--radius);padding:14px 16px;margin:12px 0;font-size:.88rem;}
+
+/* Founder timeline */
+.ftl{list-style:none;margin:6px 0 0;padding:0 0 0 22px;border-left:2px solid var(--border);}
+.ftl-item{position:relative;padding:0 0 14px 14px;}
+.ftl-dot{position:absolute;left:-31px;top:4px;width:16px;height:16px;border-radius:50%;border:2px solid var(--card);background:var(--blue);}
+.ftl-dot.blue{background:var(--blue);}
+.ftl-dot.green{background:var(--green);}
+.ftl-dot.yellow{background:var(--yellow);}
+.ftl-dot.red{background:var(--red);}
+.ftl-title{font-weight:800;font-size:.92rem;color:var(--ink);}
+.ftl-sub{font-size:.82rem;color:var(--muted);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;}
+.chip{font-size:.78rem;padding:5px 12px;border-radius:999px;border:1px solid var(--border);font-weight:600;background:var(--card);color:var(--ink);}
+.chip.blue{background:var(--blue-light);color:var(--blue);border-color:#bfdbfe;}
+.chip.green{background:var(--green-light);color:#047857;border-color:#a7f3d0;}
+.mini-stat{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:.84rem;margin-top:8px;font-weight:600;}
+
+/* Info grid */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.info-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.info-label{font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:4px;}
+.info-value{font-size:.95rem;font-weight:700;color:var(--ink);}
+
+/* Gap */
+.gap{display:block;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius);margin:8px 0;font-size:.86rem;font-weight:600;}
+.gap-red{background:var(--red-light);color:#b91c1c;}
+.gap-yellow{background:var(--yellow-light);color:#b45309;}
+.gap-green{background:var(--green-light);color:#047857;}
+.intro-box{background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--radius);padding:18px;font-size:.92rem;line-height:1.8;}
+
+ul{margin:8px 0 8px 20px;line-height:1.8;font-size:.86rem;}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(15,23,42,.9);display:none;align-items:center;justify-content:center;z-index:999;cursor:zoom-out;}
+.lightbox img{max-width:92vw;max-height:92vh;border-radius:8px;border:1px solid var(--border);}
+.lightbox.show{display:flex;}
+
+@media(max-width:768px){.scorecard,.grid-2,.info-grid,.role-map{grid-template-columns:1fr;flex-direction:column;}.role-arrow{transform:rotate(90deg);}}
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 0;}
+.btn-dl{background:var(--blue);color:#fff;border:none;border-radius:8px;box-shadow:var(--shadow-sm);padding:11px 18px;font-size:.9rem;font-weight:700;cursor:pointer;}
+.btn-dl:hover{background:#2563eb;}
+.toolbar-tip{color:var(--muted);font-size:.76rem;}
+
+/* 人才画像卡 */
+.comp-list{margin:6px 0;}
+.comp-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:.86rem;}
+.comp-name{width:90px;flex:none;font-weight:700;color:var(--ink);}
+.comp-track{flex:1;height:14px;background:var(--bg);border:1px solid var(--border);border-radius:999px;overflow:hidden;}
+.comp-track i{display:block;height:100%;background:var(--blue);}
+.comp-val{width:66px;flex:none;text-align:right;color:var(--muted);font-size:.8rem;font-weight:700;}
+.persona-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px;}
+.persona-col{border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-size:.82rem;background:var(--card);}
+.persona-col.ideal{background:var(--green-light);}
+.persona-col.ok{background:var(--card);}
+.persona-col.bad{background:var(--red-light);color:#7f1d1d;}
+.persona-col.bad h5{color:#7f1d1d;}
+.persona-col h5{margin:0 0 8px;font-size:.95rem;font-weight:800;color:var(--ink);}
+.persona-col ul{margin:4px 0 0 16px;line-height:1.6;}
+@media(max-width:768px){.persona-3{grid-template-columns:1fr;}}
+
+#dlBtn{position:fixed;right:20px;bottom:24px;height:48px;padding:0 18px;border:none;border-radius:8px;background:var(--blue);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);z-index:99;}
+#dlBtn:hover{background:#2563eb;}
+</style>
+</head>
+<body>
+<div style="background:#fffbeb;border-bottom:1px solid #fde68a;padding:10px 16px;text-align:center;font-size:.85rem;color:#92400e">🧪 <b>脱敏演示样例</b>：公司「星澜宠物」为化名，全部公司 / 人物 / 数据均为演示用途虚构，非真实信息；版式与功能与正式输出完全一致。</div>
+<div class="container">
+
+  <!-- ===== Header（动态标题：公司名 - 岗位名 JD 需求拆解全景报告） ===== -->
+  <header class="overview-header">
+    <h1>星澜宠物（化名） - 用户研究专家 JD 需求拆解全景报告</h1>
+    <div class="tags-row">
+      <span class="header-tag">赛道：宠物生活方式新消费</span>
+      <span class="header-tag">行业：宠物食品 / 用品 / 门店服务</span>
+      <span class="header-tag">模式：DTC 电商 + 直营门店 + 会员订阅</span>
+      <span class="header-tag">阶段：B 轮 · 扩张期</span>
+    </div>
+    <div class="scorecard">
+      <div class="score-card"><div class="label">公司阶段</div><div class="value">B 轮 · 成长期</div></div>
+      <div class="score-card"><div class="label">核心赛道</div><div class="value">宠物综合服务</div></div>
+      <div class="score-card"><div class="label">综合匹配度</div><div class="value">待评估</div></div>
+      <div class="score-card"><div class="label">风险等级</div><div class="value">中（示例）</div></div>
+    </div>
+    <div class="toolbar">
+      <button class="btn-dl" onclick="downloadHTML()">⤓ 保存 / 下载 HTML</button>
+      <span class="toolbar-tip">点击即把本报告存为 .html 单文件，浏览器打开即用、无需转换格式</span>
+    </div>
+  </header>
+
+  <!-- ===== Tabs ===== -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'phase1')">JD 透视与匹配</button>
+    <button class="tab-btn" onclick="switchTab(event,'phase2')">深度调研看板</button>
+  </div>
+
+  <!-- ============ 第一阶段：JD 透视与匹配 ============ -->
+  <div id="phase1" class="tab-content active">
+
+    <!-- JD 原图（左） + HR五问（右） -->
+    <div class="grid-2">
+      <div class="card">
+                <div class="card-title">JD 原文与来源</div>
+        
+        <div class="jd-source-bar">
+          <span class="sub-label">来源方式：</span>
+          <span class="tag jd">文字</span>
+        </div>
+
+        
+        
+        <div class="jd-box jd-text">
+          <div class="jd-label">📝 JD 文字</div>
+          <blockquote class="jd-quote">岗位名称：用户研究专家（P7）
+工作地点：上海 · 徐汇
+薪资范围：25-40K · 15 薪
+
+岗位职责：
+1. 负责宠物食品、用品及门店服务线的用户研究规划与落地，主导用户画像、需求洞察与体验优化项目；
+2. 独立设计并执行定性与定量研究（深度访谈、焦点小组、问卷、可用性测试），输出可落地的洞察报告；
+3. 搭建并运营核心用户库（NPS / 复购 / 会员行为数据），将数据转化为产品与运营决策依据；
+4. 协同产品、运营、供应链团队，推动洞察在 SKU 规划、门店服务 SOP、会员体系中的落地；
+5. 沉淀研究方法论与工具，提升团队研究效率。
+
+任职要求：
+1. 本科及以上学历，心理学、社会学、统计学、工业设计等相关专业优先；
+2. 5 年以上用户研究经验，有新消费、零售、宠物或母婴行业背景优先；
+3. 精通至少一种定量分析工具（SPSS / R / Python），具备数据建模能力；
+4. 有从 0 到 1 搭建用户研究体系或用户库的经验；
+5. 强跨部门推动力，能将复杂洞察翻译为业务语言；
+6. 有门店 / 线下服务研究经验为加分项。</blockquote>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">资深 HR 视角 JD 深度解读五问</div>
+        <div class="hr-block">
+          <h4>1. 岗位主要在做什么、解决什么问题？</h4>
+          <p><strong>白话：</strong>把“用户到底为什么买、为什么流失”研究清楚，给产品、门店、会员体系提供决策依据，是这个岗位在业务里补的核心链路。</p>
+        </div>
+        <div class="hr-block">
+          <h4>2. 最重要的职责、能力与特质</h4>
+          <p><span class="tag jd">JD 明确</span> 主导定性 + 定量研究设计，独立产出可落地的洞察报告，并搭建用户库。</p>
+          <p><span class="tag infer">合理推测</span> 实际还需具备从会员 / 交易数据中自主挖掘问题的能力，而非只按需求执行项目。</p>
+        </div>
+        <div class="hr-block">
+          <h4>3 &amp; 4. 对接对象与业务基本逻辑</h4>
+          <p>岗位处在“用户 / 数据—产品 / 运营决策”的枢纽：上游接业务需求，下游推动落地并复盘。</p>
+          <div class="role-map">
+            <div class="role-node">上游：产品 / 运营 / 供应链（提研究需求）<br><span class="sub-text">SKU 规划、门店服务、会员增长</span></div>
+            <div class="role-arrow">➔</div>
+            <div class="role-node self">你：用户研究专家<br><span class="sub-text">研究设计与洞察产出</span></div>
+            <div class="role-arrow">➔</div>
+            <div class="role-node">下游：产品 / 运营 / 门店（落地与复盘）<br><span class="sub-text">洞察落地效果评估</span></div>
+          </div>
+        </div>
+        <div class="hr-block" style="margin-bottom:0;background:var(--blue-light);border-color:var(--blue)">
+          <h4>5. 需准备的真实案例</h4>
+          <p><strong>扛指标：</strong>用户库覆盖率、NPS、复购率提升等可量化目标（示例）。</p>
+          <p><strong>跨部门：</strong>与产品、运营、供应链协同，推动 SKU 与服务 SOP 优化的案例。</p>
+          <p><strong>抗压破局：</strong>在数据不足或业务方配合度低时，仍能拿到关键洞察的经历。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JD 深度解码：他们到底要什么人 -->
+    <div class="card">
+      <div class="card-title">JD 深度解码：他们到底要什么人</div>
+      <div class="hr-block" style="margin-bottom:14px">
+        <p style="font-size:.92rem;line-height:1.8"><b>一句话画像：</b>能自己找题、自己解题、推动落地的“研究操盘手”，而不是等需求的项目执行者。</p>
+      </div>
+      <div class="grid-2" style="margin-bottom:12px">
+        <div class="mini-stat"><b>🔧 硬门槛：</b>本科及以上，5 年+ 用户研究经验；精通 SPSS / R / Python 之一；有 0→1 研究体系搭建经验。</div>
+        <div class="mini-stat"><b>🧠 软特质：</b>业务翻译能力、跨部门推动力、自驱与好奇心。</div>
+      </div>
+      <div class="chips">
+        <span class="chip blue">业务 Sense</span><span class="chip blue">数据驱动</span>
+        <span class="chip green">能带 1-2 人小组</span><span class="chip green">接受周期性到店 / 到家调研</span>
+      </div>
+    </div>
+
+    <!-- 目标人才画像卡 -->
+    <div class="card">
+      <div class="card-title">🎯 目标人才画像卡</div>
+      <div class="hr-block" style="margin-bottom:16px">
+        <p style="font-size:.94rem;line-height:1.9"><b>一句话 archetype：</b>能扛“用户增长与体验指标”的研究操盘手——自己找题、自己解题、推动落地，而非等需求的项目执行者。</p>
+      </div>
+      <div class="grid-2" style="align-items:start">
+        <div>
+          <div class="sub-label" style="margin-bottom:8px">胜任力模型（权重 / 等级）</div>
+          <div class="comp-list">
+            <div class="comp-row"><span class="comp-name">业务操盘</span><span class="comp-track"><i style="width:90%"></i></span><span class="comp-val">必需·高</span></div>
+            <div class="comp-row"><span class="comp-name">数据驱动</span><span class="comp-track"><i style="width:75%"></i></span><span class="comp-val">必需·中高</span></div>
+            <div class="comp-row"><span class="comp-name">跨协推动</span><span class="comp-track"><i style="width:65%"></i></span><span class="comp-val">加分·中</span></div>
+            <div class="comp-row"><span class="comp-name">抗压破局</span><span class="comp-track"><i style="width:80%"></i></span><span class="comp-val">必需·高</span></div>
+            <div class="comp-row"><span class="comp-name">行业认知</span><span class="comp-track"><i style="width:60%"></i></span><span class="comp-val">加分·中</span></div>
+          </div>
+          <span class="sub-text">条宽＝该能力在岗位中的权重；「必需」来自 JD 明确，「加分」为合理推测（黄）。</span>
+        </div>
+        <div>
+          <div class="sub-label" style="margin-bottom:8px">理想 vs 雷区</div>
+          <div class="hl-green"><b>✅ 理想候选人：</b>有 0→1 用户库搭建经验，能拿研究数据直接推动过 SKU / 服务决策，讲得清“研究如何变成钱”。</div>
+          <div class="hl-red" style="margin-top:10px"><b>⛔ 雷区候选人：</b>只会按 brief 做访谈写报告，讲不出洞察如何影响决策；数据感弱，只做定性。</div>
+        </div>
+      </div>
+      <div class="sub-label" style="margin:18px 0 6px">三类候选 archetype 对比</div>
+      <div class="persona-3">
+        <div class="persona-col ideal">
+          <h5>🌟 理想型</h5>
+          <ul>
+            <li>有 0→1 研究体系搭建经验</li>
+            <li>定量定性双修，懂业务语言</li>
+            <li>入职即能扛用户研究主线，缩短业务试错周期</li>
+          </ul>
+        </div>
+        <div class="persona-col ok">
+          <h5>🟡 及格型</h5>
+          <ul>
+            <li>能规范执行研究项目</li>
+            <li>缺 0→1 经验与数据建模能力，需带教</li>
+          </ul>
+        </div>
+        <div class="persona-col bad">
+          <h5>🔴 雷区型</h5>
+          <ul>
+            <li>只做执行不改结论</li>
+            <li>无零售 / 线下场景经验且学习意愿弱</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- JD 逐条拆解 -->
+    <div class="card">
+      <div class="card-title">JD 逐条拆解</div>
+      <table class="matrix-table">
+        <thead><tr><th>原文摘句</th><th>类型</th><th>解码：他到底要什么</th><th>标注</th></tr></thead>
+        <tbody>
+          <tr><td>「独立设计并执行定性与定量研究，输出可落地的洞察报告」</td><td>硬性</td><td>要的是能独立闭环的研究者：从选题、设计到产出、汇报一人包干</td><td><span class="tag jd">JD明确</span></td></tr>
+          <tr><td>「搭建并运营核心用户库（NPS / 复购 / 会员行为数据）」</td><td>硬性</td><td>暗示团队目前没有体系化用户库，要从 0 建，且必须接真实业务数据</td><td><span class="tag infer">合理推测</span></td></tr>
+        </tbody>
+      </table>
+      <span class="sub-text"><span class="sub-label">标注：</span>蓝＝JD明确写出，黄＝对其真实意图的合理推测。</span>
+    </div>
+
+    <!-- HR 终局判断 -->
+    <div class="card">
+      <div class="card-title">HR 终局判断：你到底是不是对的人</div>
+      <div class="hr-block" style="margin-bottom:0;border-left:4px solid var(--blue)">
+        <p style="font-size:.92rem;line-height:1.8">他们要的不是“会做研究的人”，而是“能让研究影响决策的人”：能否把洞察翻译成产品 / 运营动作，是终局判断标准。</p>
+      </div>
+    </div>
+
+    <!-- 逐条匹配分析表 -->
+    <div class="card">
+      <div class="card-title">逐条匹配分析 简历 vs JD</div>
+      <table class="matrix-table">
+        <thead><tr><th>JD 要求</th><th>简历依据</th><th>匹配度</th><th>gap / 风险</th><th>面试具体策略</th></tr></thead>
+        <tbody>
+          <tr><td>5 年+ 用户研究经验，新消费背景优先</td><td>待补充（上传简历后生成）</td><td style="text-align:center;font-weight:700">待评估</td><td>是否有新消费 / 宠物行业深耕案例</td><td>用快消 / 母婴迁移案例证明行业可迁移性</td></tr>
+        </tbody>
+      </table>
+      <span class="sub-text"><span class="sub-label">说明：</span>若无简历，简历依据列留待补充；匹配度可标「待评估」。</span>
+
+      <h4 class="sec-h" style="margin-top:18px">📊 综合匹配度维度拆解（百分制）</h4>
+      <table class="matrix-table">
+        <thead><tr><th>维度</th><th>得分</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>经验匹配</td><td style="text-align:center;font-weight:700">待评估/25</td><td>上传简历后自动生成，不猜测个人情况</td></tr>
+          <tr><td>技能匹配</td><td style="text-align:center;font-weight:700">待评估/25</td><td>上传简历后自动生成</td></tr>
+          <tr><td>行业认知</td><td style="text-align:center;font-weight:700">待评估/25</td><td>上传简历后自动生成</td></tr>
+          <tr><td>岗位层级匹配</td><td style="text-align:center;font-weight:700">待评估/25</td><td>上传简历后自动生成</td></tr>
+        </tbody>
+      </table>
+      <div class="hl-green" style="margin-top:10px"><b>适配点：</b>待补充（上传简历后自动生成）</div>
+      <div class="hl-red" style="margin-top:8px"><b>差距点：</b>待补充（上传简历后自动生成）</div>
+      <span class="sub-text"><span class="sub-label">规则：</span>仅当用户已上传简历时生成此块（四维度得分合计＝头部百分制总分）；无简历则整块替换为「待补充（上传简历后自动生成）」，不打分、不猜测个人情况。</span>
+    </div>
+
+    <!-- 定制版自我介绍 -->
+    <div class="card">
+      <div class="card-title">定制版自我介绍（≤250 字）</div>
+      <div class="intro-box"><p>您好，我是做用户研究出身的，过去五年一直待在新消费赛道。我习惯自己找题：从数据和用户反馈里发现问题，设计研究去验证，最后盯着落地。上一份工作我从 0 到 1 搭了用户库，把 NPS 和复购数据接进产品决策流程，两个核心 SKU 的迭代都有研究直接参与。我了解到星澜正从电商往门店和会员体系走，这个阶段用户研究能派上大用场，希望把这份经验带过来。</p></div>
+    </div>
+
+    <!-- Gap 清单 -->
+    <div class="card">
+      <div class="card-title">Gap 清单（按优先级）</div>
+      <div class="gap gap-red"><input type="checkbox" style="margin-right: 8px;"><b>红·高优先级：</b>准备 1 个“研究直接影响 GMV / 复购”的完整案例（背景 - 设计 - 洞察 - 决策 - 结果）</div>
+      <div class="gap gap-yellow"><input type="checkbox" style="margin-right: 8px;"><b>黄·中优先级：</b>补宠物行业基础认知：品类格局、头部品牌打法、养宠人群结构</div>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right: 8px;"><b>绿·低优先级：</b>了解星澜主打品类与价格带，准备 2 个针对性反问</div>
+    </div>
+
+    <!-- 面经总结、真题预测与面试行动指南 -->
+    <div class="card">
+      <div class="card-title">面经总结、真题预测与面试行动指南</div>
+
+      <h4 class="sec-h">📚 面经总结与真题预测</h4>
+      <div class="hl-yellow"><b>平台 / 关键词：</b>牛客 / 看准 / 脉脉，关键词“用户研究 新消费”“用研 宠物”</div>
+      <div style="background:#f8fafc;padding:14px;border-radius:8px;margin-top:12px">
+        <p style="font-size:.86rem"><b>高频真题信号：</b></p>
+        <ul><li>“讲一个你主导的完整研究项目”“如何衡量研究价值”“没有数据时怎么做决策”</li></ul>
+      </div>
+
+      <h4 class="sec-h" style="margin-top:18px">✅ 面试前准备清单</h4>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right: 8px;">2 个完整研究案例 + 1 份脱敏洞察报告样例</div>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right: 8px;">自我介绍掐表 90 秒，演练 3 遍</div>
+      <div class="gap gap-green"><input type="checkbox" style="margin-right: 8px;">JD 关键词复盘：用户库 / NPS / 定量定性 / 推动落地</div>
+
+      <h4 class="sec-h" style="margin-top:18px">🌙 面试前 1 天必做</h4>
+      <ul>
+        <li>线上 / 线下路线与设备确认，纸质简历 3 份</li>
+        <li>复盘 3 个核心案例（STAR 结构）</li>
+        <li>反问清单定稿（3 问）</li>
+      </ul>
+
+      <h4 class="sec-h" style="margin-top:18px">🎯 面试中关键原则</h4>
+      <div class="chips">
+        <span class="chip blue">用数据说话</span>
+        <span class="chip blue">先结论后展开</span>
+        <span class="chip green">经历对齐 JD</span>
+      </div>
+
+      <h4 class="sec-h" style="margin-top:18px">🎒 面试当天的准备</h4>
+      <ul>
+        <li>简历 / 作品集 / 证件 / 充电宝</li>
+        <li>提前 15 分钟到场或上线</li>
+        <li>深呼吸，语速放慢半拍</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 第二阶段：深度调研看板 ============ -->
+  <div id="phase2" class="tab-content">
+
+    <!-- 公司基本面 -->
+    <div class="card">
+      <div class="card-title">公司基本面</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">公司全称 &amp; 成立时间</div>
+          <div class="info-value">星澜宠物科技（上海）有限公司（化名）<br>
+            <span class="sub-text"><span class="sub-label">成立：</span>2019 年 6 月（示例）<span class="tag fact">事实·工商</span></span>
+            <span class="sub-text"><span class="sub-label">总部：</span>上海市徐汇区（示例）</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">所属赛道 &amp; 背景类型</div>
+          <div class="info-value">民营 · 消费品牌<br>
+            <span class="sub-text"><span class="sub-label">背景：</span>连续创业团队，合伙人来自电商平台与宠物供应链（示例）</span>
+            <span class="sub-text"><span class="sub-label">资方：</span>某头部消费基金 B 轮领投（示例）</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">商业模式</div>
+          <div class="info-value">DTC 电商 + 直营门店 + 会员订阅制<br><span class="sub-text">电商 GMV 占比约 7 成，门店与会员增长快（示例）</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">人员规模</div>
+          <div class="info-value">600-800 人<span class="tag fact">事实·工商</span><br>
+            <span class="sub-text"><span class="sub-label">生命周期：</span>成长期 · 扩张期</span>
+          </div>
+        </div>
+      </div>
+
+      <h4 class="sec-h" style="margin-top:20px">🎯 近期重点方向（推测）</h4>
+      <ul>
+        <li><b>业务：</b>从电商单引擎转向“电商 + 门店 + 会员”三引擎（推测）</li>
+        <li><b>市场：</b>重点布局华东与华南直营城市（推测）</li>
+        <li><b>组织：</b>扩招商品与用户研究团队，补强数据中台（推测）</li>
+      </ul>
+      <div class="hl-yellow" style="margin-top:8px"><b>与岗位匹配度：</b>用户研究正是三引擎战略的情报枢纽，汇报线预计直达用户增长负责人（推测）</div>
+    </div>
+
+    <!-- 创始人画像（时间线可视化） -->
+    <div class="card">
+      <div class="card-title">创始人画像</div>
+      <p style="margin-bottom:14px"><b>姓名：</b>陈默（化名）<span class="tag fact">事实·工商</span><span class="tag infer2">实控人身份为推测</span></p>
+      <div class="grid-2">
+        <div>
+          <h4 style="margin:0 0 8px">🧭 背景与旅程</h4>
+          <ul class="ftl">
+            <li class="ftl-item"><span class="ftl-dot blue"></span><span class="ftl-title">2013</span><span class="ftl-sub"> 某电商平台类目运营（示例）</span></li>
+            <li class="ftl-item"><span class="ftl-dot green"></span><span class="ftl-title">2019</span><span class="ftl-sub"> 创立星澜宠物，切入宠物食品细分品类（示例）</span></li>
+          </ul>
+          <div class="mini-stat">连续创业者，此前有一段宠物供应链创业经历（示例；无法确认则如实标注）</div>
+        </div>
+        <div>
+          <h4 style="margin:0 0 8px">⚡ 关键转折 · 低谷与逆袭</h4>
+          <ul class="ftl">
+            <li class="ftl-item"><span class="ftl-dot yellow"></span><span class="ftl-title">2021 供应链危机</span><span class="ftl-sub"> 核心品类代工厂断供，团队转向多源供应链 + 自建品控（示例）</span></li>
+            <li class="ftl-item"><span class="ftl-dot green"></span><span class="ftl-title">2022 品牌升级</span><span class="ftl-sub"> 从白牌电商转向自有品牌 + 门店体验（示例）</span></li>
+            <li class="ftl-item"><span class="ftl-dot red"></span><span class="ftl-title">低谷与逆袭</span><span class="ftl-sub"> 2021 年断供后靠预售制与社群运营稳住现金流，逆袭为品类头部（示例；可转面试反问素材）</span></li>
+          </ul>
+          <div class="mini-stat">黑猫投诉有一定数量物流与品控投诉（单源信号 · 推测；示例）</div>
+        </div>
+      </div>
+      <h4 style="margin:18px 0 8px">🧠 核心经营哲学与战略眼光</h4>
+      <div class="chips">
+        <span class="chip blue">用户第一</span><span class="chip blue">长期主义</span>
+        <span class="chip green">把宠物当家人</span><span class="chip green">用数据驱动选品</span>
+      </div>
+      <div class="grid-2" style="margin-top:6px">
+        <div class="mini-stat"><b>💡 最大杠杆点：</b>「用数据驱动选品」意味着用户研究直接进入选品决策链，本岗位正是杠杆点（推测）</div>
+        <div class="mini-stat"><b>🔍 待验证：</b>宣传的“全家安心粮”与部分代工模式存在口径差，需核实品控链路（示例）</div>
+      </div>
+      <span class="sub-text">官方自述原话来源：品牌官网「关于我们」页（示例）；下方解读为推测。；下方解读为推测。</span>
+    </div>
+
+    <!-- 商业模式 -->
+    <div class="grid-2">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">商业模式（怎么赚钱）</div>
+        <p style="font-size:.88rem"><b>主要客户：</b>25-35 岁一线城市养宠人群，猫经济为主（示例）<span class="tag infer2">推测</span></p>
+        <p style="font-size:.88rem"><b>怎么赚钱：</b>食品用品销售毛利 + 会员订阅复购 + 门店服务引流（示例）</p>
+        <p style="font-size:.88rem"><b>依赖资源：</b>供应链稳定性、私域会员规模、门店选址模型（示例）</p>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">大客户依赖风险</div>
+        <div class="hl-red" style="margin:0"><b>风险：中。</b>供应链单一代工依赖 + 行业价格战，若品控出问题将直接冲击复购；宠物食品行业投诉率约 3-5%（示例数据，面试前需核实最新口径）</div>
+      </div>
+    </div>
+
+    <!-- 产品与业务线 -->
+    <div class="card">
+      <div class="card-title">产品与业务线</div>
+      <table class="matrix-table">
+        <thead><tr><th>类型</th><th>代表方向</th><th>定位</th><th>与用户研究专家的关系</th></tr></thead>
+        <tbody>
+          <tr><td>核心</td><td>宠物食品主粮</td><td>营收主力，复购核心</td><td>口味 / 配方研究的主战场</td></tr>
+          <tr><td>主力</td><td>宠物用品</td><td>高频引流，连带销售</td><td>使用体验研究重点</td></tr>
+          <tr><td>利润</td><td>会员订阅制</td><td>现金流与 LTV 引擎</td><td>留存与 NPS 研究核心</td></tr>
+          <tr><td>引流</td><td>门店服务（洗护 / 寄养）</td><td>到店体验与获客入口</td><td>服务触点体验研究</td></tr>
+        </tbody>
+      </table>
+      <div class="hl-blue">
+        <b>岗位业务线地位：</b>隶属用户增长中心，处于从“支撑职能”升级为“决策职能”的过渡期；面试行动提示：主动聊研究如何进入选品会，展示决策影响力
+      </div>
+      <span class="sub-text"><span class="sub-label">说明：</span>具体品类为基于赛道与行业趋势的推测；公司未公开产品清单则标注「无法确认」。</span>
+
+      <h4 class="sec-h">📌 主推产品（当前重点销售 &amp; 推广）</h4>
+      <table class="matrix-table">
+        <thead><tr><th>产品 / 品类 / 场景</th><th>主推定位与打法</th><th>渠道</th><th>核心卖点</th></tr></thead>
+        <tbody><tr><td>全价冻干猫粮</td><td>高肉含量 + 溯源透明</td><td>25-35 岁成分党猫家长</td><td>占 GMV 约 35%（示例）</td></tr></tbody>
+      </table>
+      <span class="sub-text"><span class="sub-label">数据驱动：</span>以上为示意样例（示例数字标注「示意·待真实数据」），非公司已披露事实；接入真实销售数据后替换带「待填」单元格即可。分类维度不写死电商口径，优先按实际品类/功能/用户类型/场景/价格带；多子品牌按子品牌分组；无某项可省略。</span>
+    </div>
+
+    <!-- 竞品分析 -->
+    <div class="card">
+      <div class="card-title">竞品分析矩阵</div>
+      <table class="matrix-table">
+        <thead><tr><th>类型</th><th>代表</th><th>优劣势</th></tr></thead>
+        <tbody>
+          <tr><td><b>直接</b></td><td>国产头部宠粮品牌（示例）</td><td>价格带重叠，渠道重合</td></tr>
+          <tr><td><b>间接</b></td><td>综合电商白牌厂商</td><td>以低价抢价格敏感用户</td></tr>
+          <tr><td><b>潜在威胁</b></td><td>进口粮品牌降价</td><td>若高端线降价将挤压溢价空间</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 隐藏需求与岗位差异 -->
+    <div class="card" style="border:none;background:transparent;box-shadow:none;padding:0">
+      <div class="hl-blue" style="background:var(--blue-light);border-left:4px solid var(--blue);margin-bottom:18px">
+        <h4 style="margin:0 0 8px">🎯 隐藏需求与岗位差异性</h4>
+        <p style="font-size:.88rem"><b>真实痛点反推：</b>评论区高频词“物流慢”“换粮软便”→ 研究可切入配送体验与换粮指导（示例）</p>
+        <p style="font-size:.88rem;margin-top:6px"><b>同行岗位差异：</b>同行用研多偏电商转化，本岗位明确要求门店服务研究，门槛更高（推测）</p>
+        <p style="font-size:.88rem;margin-top:6px"><b>未写明的看重：</b>未写明但要会看经营数据、参加选品会，即“研究要离钱近”（推测）</p>
+      </div>
+      <div class="hl-yellow" style="margin-bottom:18px">
+        <h4 style="color:var(--yellow);margin:0 0 8px">💡 面试可反问问题</h4>
+        <p style="font-size:.88rem">1. 这个岗位的研究预算和选品话语权如何界定？<br>2. 用户库目前有哪些数据已经打通，哪些还是空白？<br>3. 门店服务研究的成功案例和考核标准是什么？</p>
+      </div>
+    </div>
+
+    <!-- 结论建议 -->
+    <div class="card">
+      <div class="card-title">结论与求职建议</div>
+      <div class="hl-green">
+        <p style="font-size:.9rem;margin-bottom:12px"><b>三句话总结：</b>赛道处于扩张期，公司战略从电商转向三引擎；岗位是研究体系从 0 到 1 的搭建者，需直接服务选品与会员决策；面试胜负手在“研究如何影响决策”的案例。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:.86rem">
+          <div style="background:#fff;padding:14px;border-radius:8px;border:1px solid #a7f3d0"><b>🚀 三个机会：</b><br>1. 公司战略升级期，用户研究有预算与话语权双红利<br>2. 0→1 搭用户库的经历含金量高，可写进简历亮点<br>3. 宠物赛道增速快，研究岗稀缺，竞争小于纯互联网</div>
+          <div style="background:#fff;padding:14px;border-radius:8px;border:1px solid #fecaca"><b>⚠️ 三个风险：</b><br>1. 行业价格战激烈，品控舆情可能牵连用户体验口碑<br>2. 若公司实际只要“执行型研究员”，与预期错配<br>3. 无门店研究经验者可能被隐性扣分</div>
+        </div>
+        <div style="margin-top:12px;background:#fff;padding:14px;border-radius:8px;border:1px dashed #6ee7b7;font-size:.86rem">
+          <b>🎯 面试展示重点：</b>用“研究如何影响决策”主线串起所有案例，现场展示一份脱敏洞察报告节选
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt="放大"></div>
+
+<button id="dlBtn" onclick="downloadHTML()" title="保存为 HTML 文件">⤓ 保存 / 下载 HTML</button>
+
+<script>
+function switchTab(e,id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+function zoomJD(img){
+  document.getElementById('lb-img').src=img.src;
+  document.getElementById('lb').classList.add('show');
+}
+function downloadHTML(){
+  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = (document.title || 'JD 需求拆解全景报告') + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+// 兜底：按「来源方式」标签只显示用户实际提供的那一种 JD 来源块（截图/链接/文字）
+function applyJDSource(){
+  var tag = document.querySelector('.jd-source-bar .tag.jd');
+  if(!tag) return;
+  var t = (tag.textContent||'').trim();
+  var map = [['截图','jd-img'],['链接','jd-link'],['文字','jd-text']];
+  var matched = map.filter(function(k){ return t.indexOf(k[0])>=0; });
+  if(matched.length !== 1) return;
+  var show = matched[0][1];
+  document.querySelectorAll('.jd-box').forEach(function(b){
+    b.style.display = b.classList.contains(show) ? '' : 'none';
+  });
+}
+applyJDSource();
+
+</script>
+
+
+</body></html>
