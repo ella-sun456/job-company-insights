@@ -42,31 +42,26 @@
 | 公司基本面 + 商业模式 + 竞品 | 它靠什么赚钱？这条业务是主战场还是边缘？ |
 | 隐藏需求 + 可反问问题 + 面经 | 会考什么？面试时该反问哪三个问题？ |
 
-## 报告长什么样（直接看，不用点开）
+## 报告长什么样
 
-下面是真实生成的报告截图（Demo 公司为化名「星澜宠物」，版式与真实输出完全一致）：
+真实报告截图（Demo 公司为化名「星澜宠物」，版式与真实输出完全一致）：
 
-<div align="center">
-  <p align="center"><b>① 报告头部 · 四卡概览</b></p>
-  <img src="assets/images/preview-01-overview.png" width="88%" alt="Header" />
-  <br/><br/>
-  <p align="center"><b>② JD 原文 + HR 五问</b></p>
-  <img src="assets/images/preview-02-jd-hr.png" width="88%" alt="JD + HR 5 questions" />
-  <br/><br/>
-  <p align="center"><b>③ 目标人才画像卡</b></p>
-  <img src="assets/images/preview-03-persona.png" width="60%" alt="Target persona" />
-  <br/><br/>
-  <p align="center"><b>④ JD 逐条解码（蓝＝明确 / 黄＝推测）</b></p>
-  <img src="assets/images/preview-04-table.png" width="88%" alt="Line-by-line decode" />
-  <br/><br/>
-  <p align="center"><b>⑤ 百分制匹配度 · 四维度拆解</b></p>
-  <img src="assets/images/preview-05-match.png" width="88%" alt="Fit analysis" />
-  <br/><br/>
-  <p align="center"><b>⑥ 公司深度调研看板（右侧 Tab）</b></p>
-  <img src="assets/images/preview-06-company.png" width="88%" alt="Company research dashboard" />
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%"><b>① 报告头部 · 四卡概览</b><br/><img src="assets/images/preview-01-overview.png" width="100%" alt="Header"/></td>
+    <td align="center" width="50%"><b>② JD 原文 + HR 五问</b><br/><img src="assets/images/preview-02-jd-hr.png" width="100%" alt="JD + HR"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>③ 目标人才画像卡</b><br/><img src="assets/images/preview-03-persona.png" width="100%" alt="Persona"/></td>
+    <td align="center"><b>④ JD 逐条解码（蓝＝明确 / 黄＝推测）</b><br/><img src="assets/images/preview-04-table.png" width="100%" alt="Decode"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>⑤ 百分制匹配度 · 四维度拆解</b><br/><img src="assets/images/preview-05-match.png" width="100%" alt="Fit"/></td>
+    <td align="center"><b>⑥ 公司深度调研看板（右侧 Tab）</b><br/><img src="assets/images/preview-06-company.png" width="100%" alt="Dashboard"/></td>
+  </tr>
+</table>
 
-> 以上是截图，能直接看到排版和模块。想交互体验（双 Tab 切换、点图放大、右下角下载），点上面「点开就看」里的 Demo 链接。
+> 想交互体验（双 Tab 切换、点图放大、右下角下载按钮），点上面「点开就看」里的 Demo 链接。
 
 ## 三条底线
 
@@ -84,13 +79,28 @@
 
 **更新**：技能是本地文件副本、不会自更新。到 [Releases](https://github.com/ella-sun456/job-company-insights/releases/latest) 下载最新 zip 重新导入即可覆盖；`git clone` 的用户直接 `git pull`。装的是哪一版看 `SKILL.md` 顶部版本号。
 
-## 用法
+**装好了怎么确认**：开个新对话说「用 job-company-insights 分析这个 JD：……」，AI 自动开始拆岗位并输出报告，即安装成功。
+
+## 怎么用（发什么 → 触发什么）
+
+一句话模板：
 
 ```
 用 job-company-insights 分析这个 JD：[粘贴 JD 文字 / 截图 / 链接]，公司：某某科技
 ```
 
-想算匹配度就一起发简历；只发 JD 也行，它会先拆岗位再问你要不要补简历。生成的文件浏览器打开即看，右下角可直接下载。
+JD 支持三种形式，任选其一：**截图**（图片直接发）、**链接**（招聘页 URL）、**文字**（直接粘贴）。发出去就自动触发调研，不需要额外指令；公司名不给也行，它会优先从 JD 里识别，识别不出来才追问。
+
+| 你发什么 | 会触发什么 |
+|---|---|
+| **只发 JD** | 立即自动调研公司、拆解岗位（要求 / 门槛 / 考察点）；因为没收到简历，它会用大白话反问「要不要补简历」 |
+| **JD + 简历** | 不反问，直接出完整拆解 + **百分制匹配度**：经验 / 技能 / 行业认知 / 岗位层级四维度打分，列出适配点、差距点和 Gap 清单 |
+| **JD + 公司名** | 拆岗位 + **公司深度调研看板**：基本面 / 商业模式 / 竞品 / 隐藏需求 / 面试可反问问题 |
+| **JD + 简历 + 公司名** | **全景报告**（最完整）：左 Tab「JD 透视与匹配」，右 Tab「深度调研看板」 |
+| **看完报告再补简历** | 自动升级为带匹配度分数的完整报告 |
+| **指定语言**（如「用英文出报告」） | 语言跟随你的指令；不指定则按 JD 自动判断——中文 JD 出中文报告，英文 JD 出英文报告 |
+
+生成的报告浏览器打开即看，右下角按钮直接下载 `JD分析报告-岗位名称.html`，单文件离线可用。
 
 ## 使用说明
 

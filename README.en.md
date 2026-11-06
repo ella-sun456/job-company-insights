@@ -42,31 +42,26 @@ Not keyword parroting — recruiter view (five HR questions, intent decoding, ta
 | Company fundamentals, model, competitors | How does it make money? Main battlefield or side project? |
 | Unstated needs + questions to ask back + interview intel | What gets tested? Which three questions should I ask? |
 
-## What the report looks like (direct preview, no click needed)
+## What the report looks like
 
-Below are real screenshots of the generated report (demo company is a fictional alias, layout matches the real output exactly):
+Real report screenshots (the demo company is a fictional alias; layout matches the real output exactly):
 
-<div align="center">
-  <p align="center"><b>① Header · four overview cards</b></p>
-  <img src="assets/images/preview-01-overview.png" width="88%" alt="Header" />
-  <br/><br/>
-  <p align="center"><b>② JD text + five HR questions</b></p>
-  <img src="assets/images/preview-02-jd-hr.png" width="88%" alt="JD + HR 5 questions" />
-  <br/><br/>
-  <p align="center"><b>③ Target persona card</b></p>
-  <img src="assets/images/preview-03-persona.png" width="60%" alt="Target persona" />
-  <br/><br/>
-  <p align="center"><b>④ JD line-by-line decode (blue = stated / yellow = inferred)</b></p>
-  <img src="assets/images/preview-04-table.png" width="88%" alt="Line-by-line decode" />
-  <br/><br/>
-  <p align="center"><b>⑤ 100-point fit · four-dimension breakdown</b></p>
-  <img src="assets/images/preview-05-match.png" width="88%" alt="Fit analysis" />
-  <br/><br/>
-  <p align="center"><b>⑥ Company research dashboard (right tab)</b></p>
-  <img src="assets/images/preview-06-company.png" width="88%" alt="Company research dashboard" />
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%"><b>① Header · four overview cards</b><br/><img src="assets/images/preview-01-overview.png" width="100%" alt="Header"/></td>
+    <td align="center" width="50%"><b>② JD text + five HR questions</b><br/><img src="assets/images/preview-02-jd-hr.png" width="100%" alt="JD + HR"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>③ Target persona card</b><br/><img src="assets/images/preview-03-persona.png" width="100%" alt="Persona"/></td>
+    <td align="center"><b>④ JD line-by-line decode (blue = stated / yellow = inferred)</b><br/><img src="assets/images/preview-04-table.png" width="100%" alt="Decode"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>⑤ 100-point fit · four-dimension breakdown</b><br/><img src="assets/images/preview-05-match.png" width="100%" alt="Fit"/></td>
+    <td align="center"><b>⑥ Company research dashboard (right tab)</b><br/><img src="assets/images/preview-06-company.png" width="100%" alt="Dashboard"/></td>
+  </tr>
+</table>
 
-> These are static screenshots to show layout and modules. For the interactive experience (tab switch, image zoom, bottom-right download button), click the demo link in the "Open it in one click" table above.
+> For the interactive experience (tab switching, image zoom, the download button), open the demo link in the "Open it in one click" table above.
 
 ## Three rules it never breaks
 
@@ -84,13 +79,28 @@ Platform entry points and troubleshooting: [docs/install.md](docs/install.md).
 
 **Updating**: the skill is a local copy and never self-updates. Grab the latest zip from [Releases](https://github.com/ella-sun456/job-company-insights/releases/latest) and import it again to overwrite; `git clone` users can simply `git pull`. The version is printed at the top of `SKILL.md`.
 
-## Usage
+**How to verify it installed**: in a fresh chat, say "Use job-company-insights to analyze this JD: …" — if the AI starts decoding the role and produces the report, it is installed.
+
+## How to use it (what to send → what happens)
+
+One-liner template:
 
 ```
 Use job-company-insights to analyze this JD: [paste JD text / screenshot / link], company: Acme Tech
 ```
 
-Add your résumé for the 100-point fit score; a JD alone also works — it decodes the role first and then asks. The output opens in any browser and can be saved from the bottom-right button.
+The JD can arrive as a **screenshot**, a **link**, or **plain text** — any one form works. Sending it immediately triggers company research; no extra command needed. The company name is optional: it is extracted from the JD first and asked for only if undetectable.
+
+| What you send | What happens |
+|---|---|
+| **JD only** | Company research and role decoding start immediately (requirements / thresholds / what gets tested); since no résumé arrived, it asks in plain words whether to add one |
+| **JD + résumé** | No questions — full decode plus the **100-point fit score**: experience / skills / industry insight / seniority scored separately, with strengths, gaps and a to-do list |
+| **JD + company name** | Role decode + the **company research dashboard**: fundamentals / business model / competitors / unstated needs / questions to ask back |
+| **JD + résumé + company name** | The **full report**: left tab "JD decoding & fit", right tab "company research dashboard" |
+| **Résumé sent after the report** | Automatically upgraded to the full scored report |
+| **Language specified** (e.g. "report in English") | Language follows your instruction; otherwise auto-detected from the JD — Chinese JD → Chinese report, English JD → English report |
+
+The generated report opens in any browser; the bottom-right button downloads the single-file HTML report directly, fully offline-readable.
 
 ## Notes
 
