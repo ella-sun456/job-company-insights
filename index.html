@@ -55,7 +55,9 @@ html[data-lang="zh"] .zh{display:inline}
     <button type="button" data-lang="zh">中文</button>
   </div>
 
-  <img class="hero-img" src="assets/images/banner.png"
+  <img class="hero-img" id="hero" src="assets/images/banner-en.png"
+       data-src-en="assets/images/banner-en.png"
+       data-src-zh="assets/images/banner.png"
        alt="JD Decoder × Company Research"
        data-alt-en="JD Decoder × Company Research"
        data-alt-zh="JD 需求拆解 × 企业深度调研">
@@ -181,6 +183,9 @@ html[data-lang="zh"] .zh{display:inline}
     document.title = TITLE[lang];
     document.querySelectorAll('img[data-alt-en]').forEach(function (img) {
       img.alt = img.getAttribute('data-alt-' + lang);
+      if (img.id === 'hero') {
+        img.src = img.getAttribute('data-src-' + lang);
+      }
     });
     buttons.forEach(function (b) {
       b.classList.toggle('on', b.getAttribute('data-lang') === lang);
