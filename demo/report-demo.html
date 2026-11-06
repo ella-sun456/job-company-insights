@@ -595,7 +595,10 @@ function zoomJD(img){
 function downloadHTML(){
   var name = (document.title || 'JD 需求拆解全景报告') + '.html';
   var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var done = false;
+  var preview = false;
+  try{ preview = (window.top !== window); }catch(e){ preview = true; }
+  // 在线预览（iframe 沙箱）里浏览器禁止自动下载，直接给可操作的替代方案
+  if(preview){ showSaveHelp(html, name); return; }
   try{
     var blob = new Blob([html], {type:'text/html;charset=utf-8'});
     var url = URL.createObjectURL(blob);
@@ -605,27 +608,38 @@ function downloadHTML(){
     a.rel = 'noopener';
     document.body.appendChild(a);
     a.click();
-    done = true;
     // 延迟回收，避免刚触发就被 revoke 打断下载
     setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} URL.revokeObjectURL(url); }, 4000);
-  }catch(e){ done = false; }
-  // 在线预览（iframe 沙箱）会拦截 a[download]，改为在新窗口里再触发一次下载
-  if(window.top !== window || !done){ saveInNewWindow(html, name); }
+  }catch(e){ showSaveHelp(html, name); }
 }
-function saveInNewWindow(html, name){
-  var w = null;
-  try{ w = window.open('', '_blank'); }catch(e){}
-  if(!w){ alert('当前预览环境禁止下载。\n请把本文件下载到本地后再打开，或按 Ctrl+S / ⌘S 保存。'); return; }
-  var inject = '<scr'+'ipt>window.addEventListener("load",function(){try{' +
-    'var b=new Blob([document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});' +
-    'var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download=' + JSON.stringify(name) + ';' +
-    'document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);},4000);' +
-    '}catch(e){}});</scr'+'ipt>';
-  try{
-    w.document.open();
-    w.document.write(html.replace(/<\/body>/i, inject + '</body>'));
-    w.document.close();
-  }catch(e){}
+function showSaveHelp(html, name){
+  if(document.getElementById('save-help')) return;
+  var d = document.createElement('div');
+  d.id = 'save-help';
+  d.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(15,25,40,.55);z-index:99;display:flex;align-items:center;justify-content:center;padding:20px';
+  d.innerHTML =
+    '<div style="max-width:540px;background:#fff;border-radius:14px;padding:22px 24px;font:14px/1.7 -apple-system,\'PingFang SC\',sans-serif;color:#1f2329;box-shadow:0 20px 60px rgba(0,0,0,.25)">' +
+      '<h3 style="margin:0 0 10px;font-size:17px">在线预览无法直接下载</h3>' +
+      '<p style="margin:0 0 10px;color:#5a6573">当前页面运行在在线预览环境（iframe 沙箱）中，浏览器禁止网页自动触发下载——这不是报告损坏，本地打开时按钮是可用的。</p>' +
+      '<p style="margin:0 0 14px;color:#5a6573">三种办法：① 点「复制 HTML 源码」，粘贴到本地新建的 .html 文件；② 按 <b>Ctrl+S / ⌘S</b> 保存本页；③ 下载源文件到本地后打开，页面里的下载按钮即可正常保存。</p>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+        '<button id="sh-copy" style="padding:9px 16px;border:0;border-radius:8px;background:#2f6bff;color:#fff;font:600 14px/1 sans-serif;cursor:pointer">复制 HTML 源码</button>' +
+        '<button id="sh-close" style="padding:9px 16px;border:1px solid #e6e8eb;border-radius:8px;background:#fff;color:#1f2329;font:600 14px/1 sans-serif;cursor:pointer">知道了</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(d);
+  document.getElementById('sh-close').onclick = function(){ d.parentNode.removeChild(d); };
+  document.getElementById('sh-copy').onclick = function(){
+    var ta = document.createElement('textarea');
+    ta.value = html;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    this.textContent = ok ? '已复制，粘贴到本地 .html 文件即可' : '复制被拦截，请按 Ctrl+S 保存';
+  };
 }
 // 兜底：按「来源方式」标签只显示用户实际提供的那一种 JD 来源块（截图/链接/文字）
 function applyJDSource(){

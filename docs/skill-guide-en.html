@@ -851,32 +851,36 @@ function downloadHTML(){
 function downloadHTML(){
   var name='job-company-insights-skill-guide-en.html';
   var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
-  var done=false;
+  var preview=false;
+  try{ preview=(window.top!==window); }catch(e){ preview=true; }
+  if(preview){ showSaveHelp(html); return; }
   try{
     var blob=new Blob([html],{type:'text/html;charset=utf-8'});
     var url=URL.createObjectURL(blob);
     var a=document.createElement('a');
     a.href=url; a.download=name; a.rel='noopener';
-    document.body.appendChild(a); a.click(); done=true;
-    // Revoke after a delay so the download is not interrupted right after it starts.
+    document.body.appendChild(a); a.click();
     setTimeout(function(){ try{document.body.removeChild(a);}catch(e){} URL.revokeObjectURL(url); },4000);
-  }catch(e){ done=false; }
-  // Sandboxed online previews block a[download]; trigger the download again inside a new window.
-  if(window.top!==window||!done){ saveInNewWindow(html, name); }
+  }catch(e){ showSaveHelp(html); }
 }
-function saveInNewWindow(html, name){
-  var w=null;
-  try{ w=window.open('','_blank'); }catch(e){}
-  if(!w){ alert('Downloads are blocked in this preview environment.\nPlease download this file and open it locally, or save it with Ctrl+S / ⌘S.'); return; }
-  var inject='<scr'+'ipt>window.addEventListener("load",function(){try{' +
-    'var b=new Blob([document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});' +
-    'var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download=' + JSON.stringify(name) + ';' +
-    'document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);},4000);' +
-    '}catch(e){}});</scr'+'ipt>';
-  try{
-    w.document.open();
-    w.document.write(html.replace(/<\/body>/i, inject + '</body>'));
-    w.document.close();
-  }catch(e){}
+function showSaveHelp(html){
+  if(document.getElementById('save-help')) return;
+  var d=document.createElement('div');
+  d.id='save-help';
+  d.style.cssText='position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(15,25,40,.55);z-index:99;display:flex;align-items:center;justify-content:center;padding:20px';
+  d.innerHTML='<div style="max-width:540px;background:#fff;border-radius:14px;padding:22px 24px;font:14px/1.7 -apple-system,sans-serif;color:#1f2329"><h3 style="margin:0 0 10px;font-size:17px">Downloads are blocked in this preview</h3><p style="margin:0 0 10px;color:#5a6573">This page is running inside a sandboxed online preview, where browsers forbid automatic downloads. The file itself is fine — the button works when the page is opened locally.</p><p style="margin:0 0 14px;color:#5a6573">Three options: ① press “Copy HTML source” and paste it into a new local .html file; ② press <b>Ctrl+S / ⌘S</b> to save this page; ③ download the file to your machine and open it there.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button id="sh-copy" style="padding:9px 16px;border:0;border-radius:8px;background:#2f6bff;color:#fff;font:600 14px/1 sans-serif;cursor:pointer">Copy HTML source</button><button id="sh-close" style="padding:9px 16px;border:1px solid #e6e8eb;border-radius:8px;background:#fff;color:#1f2329;font:600 14px/1 sans-serif;cursor:pointer">Got it</button></div></div>';
+  document.body.appendChild(d);
+  document.getElementById('sh-close').onclick=function(){ d.parentNode.removeChild(d); };
+  document.getElementById('sh-copy').onclick=function(){
+    var ta=document.createElement('textarea');
+    ta.value=html;
+    ta.style.cssText='position:fixed;left:-9999px;top:0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok=false;
+    try{ ok=document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    this.textContent = ok ? 'Copied — paste it into a new local .html file' : 'Copy blocked, use Ctrl+S instead';
+  };
 }
 </script></body></html>
