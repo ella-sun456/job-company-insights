@@ -19,15 +19,25 @@
 
 ## 先看一眼
 
-不想读文档，直接点：
+> GitHub 网页默认**不会渲染 HTML**（直接点 `.html` 只能看到源码，这是平台行为，不是文件坏了）。想“点开就看”，用下面第一种方式。
 
-| 看什么 | 链接 |
+**① 在线直接看（推荐，无需下载）**
+[▶ 打开完整 Demo 报告](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/demo/report-demo.html)
+
+**② 下载后双击打开**（浏览器直接渲染，离线也能看）
+
+| 看什么 | 下载链接 |
 |---|---|
-| 项目主页（图文介绍） | [index.html](https://raw.githack.com/ella-sun456/job-company-insights/main/index.html) |
-| 完整 Demo 报告 | [demo/report-demo.html](https://raw.githack.com/ella-sun456/job-company-insights/main/demo/report-demo.html) |
-| 技能说明（原理与模块） | [docs/skill-guide.html](https://raw.githack.com/ella-sun456/job-company-insights/main/docs/skill-guide.html) |
+| 项目主页（图文介绍） | [index.html](https://github.com/ella-sun456/job-company-insights/raw/main/index.html) |
+| 完整 Demo 报告 | [demo/report-demo.html](https://github.com/ella-sun456/job-company-insights/raw/main/demo/report-demo.html) |
+| 技能说明（原理与模块） | [docs/skill-guide.html](https://github.com/ella-sun456/job-company-insights/raw/main/docs/skill-guide.html) |
 
-> 也可以把仓库里的 `index.html` / `demo/report-demo.html` / `docs/skill-guide.html` 下载到本地双击打开，效果一样。
+**③ GitHub Pages（开启后永久在线）**
+仓库主人执行一次：`Settings → Pages → Source: Deploy from a branch → main / (root) → Save`，几十秒后这些地址即可直接访问：
+
+- `https://ella-sun456.github.io/job-company-insights/`（项目主页）
+- `https://ella-sun456.github.io/job-company-insights/demo/report-demo.html`（Demo 报告）
+- `https://ella-sun456.github.io/job-company-insights/docs/skill-guide.html`（技能说明）
 
 ## 这是什么
 
@@ -128,13 +138,15 @@
 jd-company-insights/
 ├── index.html                    # 项目主页：一图看懂是什么、给什么
 ├── SKILL.md                      # 技能入口：角色、红线、工作流、初始化话术
+├── CHANGELOG.md                  # 版本迭代记录
 ├── references/
 │   └── html-spec.md              # 版式规范 + 逐模块数据 schema
 ├── assets/
 │   ├── template.html             # 可直接跑的单文件 HTML 骨架
 │   └── images/                   # 封面、流程图、6 张真机截图
 ├── demo/
-│   └── report-demo.html          # 脱敏示例报告，可直接打开看效果
+│   ├── report-demo.html          # 脱敏示例报告，可直接打开看效果
+│   └── README.md                 # Demo 说明 + 截图（GitHub 上能直接看）
 ├── docs/
 │   ├── skill-guide.html          # 技能说明网页版（带截图，可点开看）
 │   ├── skill-guide.md            # 技能说明完整版（含内联模板）
@@ -146,8 +158,22 @@ jd-company-insights/
     └── JD需求拆解-HTML模板-知识库上传版.txt
 ```
 
-## 说明
+## 使用说明
 
-- `demo/` 里的报告是**脱敏示例**：公司「星澜宠物」为化名，人物、数据均为演示虚构，版式与真实输出完全一致。
-- 技能的真实调研效果取决于运行环境是否具备联网检索能力；离线环境下它会如实标注「无法确认」，而不是编一个看起来很像的答案。
-- 遇到版式走样，跟它说一句「按知识库里的模板原样输出完整 HTML，不要简化」即可纠正。
+1. 企业信息优先采用**公开可验证资料**（工商 / 官网 / 应用商店 / 招聘页 / 权威新闻），无法确认的内容标记为「推测」或「待验证」，不编造信息；离线环境下会如实写「无法确认」。
+2. 所有分析结果**仅供求职参考**，不作为投递的唯一决策依据；面试前建议再自行核实关键数字。
+3. HTML 报告全部为**单文件**，下载后无需联网，浏览器直接打开即可阅读。
+4. `demo/` 里的报告是**脱敏示例**：公司「星澜宠物」为化名，人物、数据均为演示虚构，版式与真实输出完全一致。
+5. 遇到版式走样，跟它说一句「按知识库里的模板原样输出完整 HTML，不要简化」即可纠正。
+
+## 参考来源与致谢
+
+本项目在学习公开分享的 AI Skill 写法、岗位分析方法与企业调研案例的基础上，经过个人整理、归纳与实践逐步形成。部分早期参考内容暂时无法确认原作者与原始链接，后续核实后会持续补充来源与致谢。
+
+如果你发现其中某段内容来自你的分享而未被注明，欢迎提 Issue，我会立刻补上。
+
+## 版本迭代
+
+项目会持续完善岗位拆解、企业深度调研、图文报告与人岗匹配能力，具体更新记录见 [CHANGELOG.md](CHANGELOG.md)。
+
+当前版本：**v1.1.0**
