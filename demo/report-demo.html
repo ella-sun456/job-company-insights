@@ -593,16 +593,39 @@ function zoomJD(img){
   document.getElementById('lb').classList.add('show');
 }
 function downloadHTML(){
+  var name = (document.title || 'JD 需求拆解全景报告') + '.html';
   var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = (document.title || 'JD 需求拆解全景报告') + '.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  var done = false;
+  try{
+    var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    done = true;
+    // 延迟回收，避免刚触发就被 revoke 打断下载
+    setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} URL.revokeObjectURL(url); }, 4000);
+  }catch(e){ done = false; }
+  // 在线预览（iframe 沙箱）会拦截 a[download]，改为在新窗口里再触发一次下载
+  if(window.top !== window || !done){ saveInNewWindow(html, name); }
+}
+function saveInNewWindow(html, name){
+  var w = null;
+  try{ w = window.open('', '_blank'); }catch(e){}
+  if(!w){ alert('当前预览环境禁止下载。\n请把本文件下载到本地后再打开，或按 Ctrl+S / ⌘S 保存。'); return; }
+  var inject = '<scr'+'ipt>window.addEventListener("load",function(){try{' +
+    'var b=new Blob([document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});' +
+    'var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download=' + JSON.stringify(name) + ';' +
+    'document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);},4000);' +
+    '}catch(e){}});</scr'+'ipt>';
+  try{
+    w.document.open();
+    w.document.write(html.replace(/<\/body>/i, inject + '</body>'));
+    w.document.close();
+  }catch(e){}
 }
 // 兜底：按「来源方式」标签只显示用户实际提供的那一种 JD 来源块（截图/链接/文字）
 function applyJDSource(){
