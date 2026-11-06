@@ -20,7 +20,9 @@ verbatim from `assets/template.html`; only fill content. No external dependencie
 
 ## Language（报告语言）
 
-报告语言 = 用户提问语言（英文提问 → 全英文报告；中文提问 → 中文报告）；用户显式要求时以要求为准；无法判断时以 JD 原文语言为准。**除专有名词/公司名/文件路径外不混排。**
+报告语言按此顺序判断（**不询问用户**）：① 用户明确指定 → 遵循；② 未指定时看 JD 主体语言：中文 JD → 中文报告；英文 JD → 英文报告，并在报告 `<h1>` 上方加一行小字兜底备注（中文用户写：「检测到 JD 为英文，本次默认生成英文报告；如果你想要中文版本，直接回复「换成中文」即可。」；英文用户写：*Detected an English JD, so this report is in English. Reply "switch to Chinese" if you prefer a Chinese version.*）；③ 仍无法判断 → JD 原文语言，再不行用中文。**除专有名词/公司名/文件路径外不混排。**
+
+兜底备注样式：`font-size:12px; color:var(--text-sub,#6b7280); margin-bottom:8px;`，不带边框底色，避免干扰报告主体。
 
 英文报告时，模块标题按下表替换（其余版式、颜色、结构完全一致）：
 
