@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>job-company-insights · JD 需求拆解 × 企业深度调研</title>
+<style>
+:root{
+  --bg:#f7f8fa; --card:#fff; --ink:#1f2329; --sub:#5a6573; --line:#e6e8eb;
+  --brand:#2f6bff; --soft:#eaf2ff; --yellow:#fff7e0;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
+.wrap{max-width:960px;margin:0 auto;padding:34px 22px 90px}
+.hero-img{width:100%;display:block;border-radius:14px;border:1px solid var(--line)}
+h1{font-size:30px;margin:26px 0 8px;letter-spacing:-.5px}
+.lead{color:var(--sub);margin:0 0 18px;font-size:16px}
+.tagline{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 26px}
+.pill{font-size:13px;padding:4px 11px;border-radius:999px;background:var(--soft);color:var(--brand);font-weight:600}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 34px}
+.btn{display:inline-block;padding:11px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--brand);color:var(--brand)}
+h2{font-size:21px;margin:38px 0 14px}
+figure{margin:18px 0}
+figure img{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:#fff}
+figcaption{font-size:13px;color:var(--sub);margin-top:7px;text-align:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.grid figure{margin:0}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.card b{display:block;font-size:15px;margin-bottom:6px}
+.card span{display:block;font-size:13.5px;color:var(--sub);line-height:1.65}
+.note{background:var(--yellow);border-left:4px solid #f5a623;padding:12px 16px;border-radius:8px;font-size:14px;margin:26px 0}
+code{background:#eef1f5;padding:1px 6px;border-radius:4px;font-size:13.5px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <img class="hero-img" src="assets/images/banner.png" alt="JD 需求拆解 × 企业深度调研">
+
+  <h1>一条 JD 进去，一份「岗位 + 公司」全景报告出来</h1>
+  <p class="lead">投递之前，先看清这家公司到底要什么人、这个岗位在解决什么问题、你和它还差多远。</p>
+
+  <div class="tagline">
+    <span class="pill">JD 逐条解码</span>
+    <span class="pill">目标人才画像</span>
+    <span class="pill">四维度匹配度</span>
+    <span class="pill">公司深度调研</span>
+    <span class="pill">单文件 HTML</span>
+  </div>
+
+  <div class="btns">
+    <a class="btn primary" href="demo/report-demo.html">打开完整 Demo 报告 ↗</a>
+    <a class="btn ghost" href="docs/skill-guide.html">技能说明与原理 ↗</a>
+  </div>
+
+  <h2>它在做什么</h2>
+  <figure>
+    <img src="assets/images/how-it-works.png" alt="工作流程：发 JD → 真实调研 → 双 Tab 报告 → 单文件带走">
+    <figcaption>四步走完：真实调研 → 双 Tab 报告 → 单文件带走（蓝＝事实 / JD 明确，黄＝推测）</figcaption>
+  </figure>
+  <p>你把目标岗位的 JD 发过来（截图 / 链接 / 文字都行），再给个公司名，它先做真实调研，再输出一份<b>单文件、双 Tab 的 HTML 全景报告</b>——左边拆岗位与你的匹配度，右边把这家公司从工商信息一直讲到商业模式、竞品和隐藏需求。</p>
+
+  <h2>你会得到什么</h2>
+  <div class="cards">
+    <div class="card"><b>资深 HR 视角五问</b><span>这个岗位到底在干什么？在业务里补哪条链路？要准备什么案例？</span></div>
+    <div class="card"><b>JD 逐条解码 + 人才画像卡</b><span>每一句要求背后的真实意图是什么？他们真正想招的是「哪种人」？</span></div>
+    <div class="card"><b>匹配度百分制 + Gap 清单</b><span>四个维度各差多少？面试第一段话怎么说？两周内必须补哪些坑？</span></div>
+    <div class="card"><b>公司基本面 + 商业模式 + 竞品</b><span>它靠什么赚钱？这个岗位所在业务线是主战场还是边缘业务？</span></div>
+    <div class="card"><b>隐藏需求与岗位差异</b><span>JD 没写但八成在乎的是什么？面试时可以反问哪三个问题？</span></div>
+    <div class="card"><b>面经与行动指南</b><span>会考什么、前一天做什么、当天带什么？</span></div>
+  </div>
+
+  <h2>报告长什么样（真实截图）</h2>
+  <div class="grid">
+    <figure><img src="assets/images/preview-01-overview.png" alt="报告顶部"><figcaption>报告顶部：动态标题 + 赛道标签 + 四个数据卡</figcaption></figure>
+    <figure><img src="assets/images/preview-02-jd-hr.png" alt="JD 原文与 HR 五问"><figcaption>JD 原文与来源 + 资深 HR 视角五问</figcaption></figure>
+    <figure><img src="assets/images/preview-03-persona.png" alt="目标人才画像卡"><figcaption>目标人才画像卡：理想 / 及格 / 雷区三类候选人</figcaption></figure>
+    <figure><img src="assets/images/preview-04-table.png" alt="JD 逐条拆解"><figcaption>JD 逐条拆解：原文摘句 → 他到底要什么</figcaption></figure>
+    <figure><img src="assets/images/preview-05-match.png" alt="逐条匹配分析"><figcaption>逐条匹配分析 + 四维度百分制拆解</figcaption></figure>
+    <figure><img src="assets/images/preview-06-company.png" alt="深度调研看板"><figcaption>Tab 2 深度调研看板：商业模式、竞品、隐藏需求</figcaption></figure>
+  </div>
+
+  <div class="note">
+    <b>三条不会破的底线</b>：优先一手来源、查不到就写「无法确认」，不编数字；JD 明确标蓝、合理推测标黄；有简历才打分，没简历不硬凑匹配度。
+  </div>
+
+  <h2>怎么用</h2>
+  <p>装好后直接说话就行：</p>
+  <p><code>用 job-company-insights 分析这个 JD：[粘贴 JD 文字 / 截图 / 链接]，公司：某某科技</code></p>
+  <p>想算匹配度就把简历一起发上来；只发 JD 也可以，它会先拆岗位、再问你补不补简历。生成的是完整 HTML，浏览器打开即看，页面右下角有「⤓ 保存 / 下载 HTML」按钮。</p>
+
+  <footer>
+    点击 <a href="https://github.com/ella-sun456/job-company-insights">GitHub 仓库</a> 查看源码与安装包 ·
+    Demo 中的「星澜宠物」为化名，数据均为演示虚构，版式与真实输出一致。
+  </footer>
+
+</div>
+</body>
+</html>

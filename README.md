@@ -17,6 +17,18 @@
 
 ---
 
+## 先看一眼
+
+不想读文档，直接点：
+
+| 看什么 | 链接 |
+|---|---|
+| 项目主页（图文介绍） | [index.html](https://raw.githack.com/ella-sun456/job-company-insights/main/index.html) |
+| 完整 Demo 报告 | [demo/report-demo.html](https://raw.githack.com/ella-sun456/job-company-insights/main/demo/report-demo.html) |
+| 技能说明（原理与模块） | [docs/skill-guide.html](https://raw.githack.com/ella-sun456/job-company-insights/main/docs/skill-guide.html) |
+
+> 也可以把仓库里的 `index.html` / `demo/report-demo.html` / `docs/skill-guide.html` 下载到本地双击打开，效果一样。
+
 ## 这是什么
 
 一个面向**求职者**的 AI 技能：你把目标岗位的 JD 发过来（截图 / 链接 / 文字都行），再给个公司名，它会先做真实调研，再输出一份**单文件、双 Tab 的 HTML 全景报告**——左边拆岗位与你的匹配度，右边把这家公司从工商信息一直讲到商业模式、竞品和隐藏需求。
@@ -114,22 +126,24 @@
 
 ```
 jd-company-insights/
+├── index.html                    # 项目主页：一图看懂是什么、给什么
 ├── SKILL.md                      # 技能入口：角色、红线、工作流、初始化话术
 ├── references/
 │   └── html-spec.md              # 版式规范 + 逐模块数据 schema
 ├── assets/
 │   ├── template.html             # 可直接跑的单文件 HTML 骨架
-│   └── images/                   # README 用的效果图
+│   └── images/                   # 封面、流程图、6 张真机截图
 ├── demo/
 │   └── report-demo.html          # 脱敏示例报告，可直接打开看效果
-├── install/
-│   ├── job-company-insights.zip  # 桌面端一键导入包
-│   ├── job-company-insights.skill
-│   ├── 智能体系统提示词.txt        # 聊天型 AI 用
-│   └── JD需求拆解-HTML模板-知识库上传版.txt
-└── docs/
-    ├── install.md                # 跨平台安装指南
-    └── skill-guide.md            # 技能说明完整版（含内联模板）
+├── docs/
+│   ├── skill-guide.html          # 技能说明网页版（带截图，可点开看）
+│   ├── skill-guide.md            # 技能说明完整版（含内联模板）
+│   └── install.md                # 跨平台安装指南
+└── install/
+    ├── job-company-insights.zip  # 桌面端一键导入包
+    ├── job-company-insights.skill
+    ├── 智能体系统提示词.txt        # 聊天型 AI 用
+    └── JD需求拆解-HTML模板-知识库上传版.txt
 ```
 
 ## 说明
