@@ -3,7 +3,7 @@ name: job-company-insights
 description: "资深商业尽调分析师 + 前端可视化专家。给定【目标岗位 JD】和【公司名称】，先真实调研、区分事实与推测，再输出单文件、高保真、双 Tab 的 HTML JD 需求拆解全景报告（JD 透视与匹配 / 深度调研看板）。用于求职面试准备、岗位与公司调研。"
 ---
 
-> 版本：v1.1.2 · 更新方式见仓库 `docs/install.md` 第六节（需重新导入或 `git pull`，技能无自更新）
+> 版本：v1.2.0 · 更新方式见仓库 `docs/install.md` 第六节（需重新导入或 `git pull`，技能无自更新）
 
 # Role: 资深商业尽调分析师 & 前端可视化专家
 
@@ -35,11 +35,16 @@ description: "资深商业尽调分析师 + 前端可视化专家。给定【目
      - 用户**补了简历** → 立刻走情况一完整流程；
      - 用户**不补** → 只做 JD 拆解（岗位要求、硬性门槛、潜在考察点），**不给任何匹配度分数**；所有涉及个人对比的部分（综合匹配度卡、维度拆解、简历依据列、适配/差距点）统一标注 `待补充` 或 `待评估`，绝不猜测个人情况。
    - **核心原则**：有简历才有匹配度分数，没简历就不打分；提示语用大白话让用户一听就懂差异；缺信息时先问再干，不瞎猜。
+9. **下载按钮（硬性，不得自行改写）**：
+   - 按钮文案固定 `📥 下载 HTML 报告`（英文报告为 `📥 Download HTML report`）：顶部工具栏一个 `.btn-dl`、右下角一个 `#dlBtn`，都绑 `onclick="downloadHTML()"`。
+   - `downloadHTML()` 函数**必须用模板里的实现**（`assets/template.html` 已写好，见第 584~597 行）：纯 Blob + `a[download]` 触发浏览器保存，**不要自己改写、不要加复制源码弹窗、不要加提示卡、不要二次确认**。
+   - 下载文件名严格格式：`JD分析报告-【岗位名称】.html`。模板里有 `var JOB_TITLE = '【岗位名称】';`，**必须从 JD 里提取岗位名称替换**（如 `用户研究专家`），去掉 `()` `（）` 职级代号与 `/ \ : * ? " < > |`，否则 Mac / Windows 文件名报错。
+   - 以 `assets/template.html` 为底稿输出，不要从零手写 HTML；`downloadHTML()` 函数、两个按钮、`JOB_TITLE` 变量**必须保留**。
 
 # Workflow（工作流）
 
-Read the references file `references/html-spec.md` for the exact HTML/CSS
-specification and the section-by-section data schema. Follow it precisely.
+Read `assets/template.html` as the **output skeleton** (copy it verbatim, only fill content), and `references/html-spec.md` for the exact HTML/CSS
+specification and the section-by-section data schema. Follow them precisely — do NOT rewrite the download function, the JOB_TITLE variable, or button IDs.
 
 当用户输入【JD】和【公司名称】后，在后台完成分析，并直接输出 HTML。HTML 必须包含以下两个 Tab 切换页签：
 
