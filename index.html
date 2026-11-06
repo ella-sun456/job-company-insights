@@ -45,6 +45,10 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 .zh{display:none}
 html[data-lang="zh"] .en{display:none}
 html[data-lang="zh"] .zh{display:inline}
+/* 首图双份，纯 CSS 切换（在线渲染器不会重写 JS 改写的 src） */
+.hero-zh{display:none}
+html[data-lang="zh"] .hero-en{display:none}
+html[data-lang="zh"] .hero-zh{display:block}
 </style>
 </head>
 <body>
@@ -55,12 +59,10 @@ html[data-lang="zh"] .zh{display:inline}
     <button type="button" data-lang="zh">中文</button>
   </div>
 
-  <img class="hero-img" id="hero" src="assets/images/banner-en.png"
-       data-src-en="assets/images/banner-en.png"
-       data-src-zh="assets/images/banner.png"
-       alt="JD Decoder × Company Research"
-       data-alt-en="JD Decoder × Company Research"
-       data-alt-zh="JD 需求拆解 × 企业深度调研">
+  <img class="hero-img hero-en" src="assets/images/banner-en.png"
+       alt="JD Decoder × Deep Company Research">
+  <img class="hero-img hero-zh" src="assets/images/banner.png"
+       alt="JD 需求拆解 × 企业深度调研">
 
   <h1><span class="en">One JD in. A full &ldquo;role&nbsp;+&nbsp;company&rdquo; report out.</span><span class="zh">一条 JD 进去，一份「岗位 + 公司」全景报告出来</span></h1>
   <p class="lead"><span class="en">Before you apply, see who they really want, what problem this role solves, and how far you are from it.</span><span class="zh">投递之前，先看清这家公司到底要什么人、这个岗位在解决什么问题、你和它还差多远。</span></p>
@@ -183,9 +185,6 @@ html[data-lang="zh"] .zh{display:inline}
     document.title = TITLE[lang];
     document.querySelectorAll('img[data-alt-en]').forEach(function (img) {
       img.alt = img.getAttribute('data-alt-' + lang);
-      if (img.id === 'hero') {
-        img.src = img.getAttribute('data-src-' + lang);
-      }
     });
     buttons.forEach(function (b) {
       b.classList.toggle('on', b.getAttribute('data-lang') === lang);
