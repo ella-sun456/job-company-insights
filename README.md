@@ -32,12 +32,14 @@
 | 完整 Demo 报告 | [demo/report-demo.html](https://github.com/ella-sun456/job-company-insights/raw/main/demo/report-demo.html) |
 | 技能说明（原理与模块） | [docs/skill-guide.html](https://github.com/ella-sun456/job-company-insights/raw/main/docs/skill-guide.html) |
 
-**③ GitHub Pages（开启后永久在线）**
-仓库主人执行一次：`Settings → Pages → Source: Deploy from a branch → main / (root) → Save`，几十秒后这些地址即可直接访问：
+**③ GitHub Pages（开一次，永久在线）**
+在仓库页面点 **Settings → Pages**，`Source` 选 **Deploy from a branch**，分支选 **main**、目录选 **/ (root)**，点 **Save**。等 30 秒左右，下面三个地址就能直接打开（含图片，不用下载）：
 
 - `https://ella-sun456.github.io/job-company-insights/`（项目主页）
 - `https://ella-sun456.github.io/job-company-insights/demo/report-demo.html`（Demo 报告）
 - `https://ella-sun456.github.io/job-company-insights/docs/skill-guide.html`（技能说明）
+
+> 仓库本身不用改造：`index.html` 在根目录、所有路径都是相对路径，开启后即可访问。
 
 ## 这是什么
 
