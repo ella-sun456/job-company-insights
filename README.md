@@ -91,7 +91,7 @@
 下载 [install/job-company-insights.zip](install/job-company-insights.zip)，直接导入、无需解压（`SKILL.md` 在压缩包根目录，导入器可直接识别）。
 
 **方式二 · 编程型 Agent**
-把根目录的 `SKILL.md` + `references/` + `assets/` 整体放进对应技能目录，例如 `~/.codebuddy/skills/`、`~/.claude/skills/`、`~/.trae/skills/`、`~/.cursor/skills/`、项目内的 `.github/skills/`。也可以直接用 [install/jd-requirement-decomposition.skill](install/jd-requirement-decomposition.skill)。
+把根目录的 `SKILL.md` + `references/` + `assets/` 整体放进对应技能目录，例如 `~/.codebuddy/skills/`、`~/.claude/skills/`、`~/.trae/skills/`、`~/.cursor/skills/`、项目内的 `.github/skills/`。也可以直接用 [install/job-company-insights.skill](install/job-company-insights.skill)。
 
 **方式三 · 聊天型 AI（豆包 / Kimi / MiniMax / 通义 / ChatGPT）**
 新建智能体 → 把 [install/智能体系统提示词.txt](install/智能体系统提示词.txt) 贴进系统提示词 → 上传 [install/JD需求拆解-HTML模板-知识库上传版.txt](install/JD需求拆解-HTML模板-知识库上传版.txt) 到知识库。
@@ -103,7 +103,7 @@
 装好后直接说话就行，三种说法都触发：
 
 ```
-用 jd-requirement-decomposition 分析这个 JD：[粘贴 JD 文字 / 截图 / 链接]，公司：某某科技
+用 job-company-insights 分析这个 JD：[粘贴 JD 文字 / 截图 / 链接]，公司：某某科技
 ```
 
 - 想算匹配度，就把简历一起发上来（会自动跑百分制评分）；
@@ -124,7 +124,7 @@ jd-company-insights/
 │   └── report-demo.html          # 脱敏示例报告，可直接打开看效果
 ├── install/
 │   ├── job-company-insights.zip  # 桌面端一键导入包
-│   ├── jd-requirement-decomposition.skill
+│   ├── job-company-insights.skill
 │   ├── 智能体系统提示词.txt        # 聊天型 AI 用
 │   └── JD需求拆解-HTML模板-知识库上传版.txt
 └── docs/

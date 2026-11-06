@@ -1,5 +1,5 @@
 ---
-name: jd-requirement-decomposition
+name: job-company-insights
 description: "资深商业尽调分析师 + 前端可视化专家。给定【目标岗位 JD】和【公司名称】，先真实调研、区分事实与推测，再输出单文件、高保真、双 Tab 的 HTML JD 需求拆解全景报告（JD 透视与匹配 / 深度调研看板）。用于求职面试准备、岗位与公司调研。"
 ---
 

@@ -4,14 +4,14 @@
 > 原理：版式是内联在 HTML 里的标准 CSS/JS，与平台无关；只要 AI 按系统提示词 + 知识库模板输出完整 HTML，浏览器打开就是同一版式。
 > 本包已合并为**单一压缩包 `job-company-insights.zip`**，三种通道（桌面端导入 / 编程型 Agent / 聊天型 AI）都用它，无需再区分“导入专用包”。
 >
-> 本仓库中所有安装物料统一放在 [`install/`](../install) 目录：`job-company-insights.zip`（桌面端导入）、`jd-requirement-decomposition.skill`（原生安装）、`智能体系统提示词.txt` 与 `JD需求拆解-HTML模板-知识库上传版.txt`（聊天型 AI 用）。技能本体则是根目录的 `SKILL.md` + `references/` + `assets/`。
+> 本仓库中所有安装物料统一放在 [`install/`](../install) 目录：`job-company-insights.zip`（桌面端导入）、`job-company-insights.skill`（原生安装）、`智能体系统提示词.txt` 与 `JD需求拆解-HTML模板-知识库上传版.txt`（聊天型 AI 用）。技能本体则是根目录的 `SKILL.md` + `references/` + `assets/`。
 
 ## 包内安装物料（本包已备齐）
 
 | 文件 | 用途 |
 |---|---|
 | `SKILL.md`（根目录）+ `references/` + `assets/` | **技能本体**，桌面端导入 / 文件夹安装都用它 |
-| `jd-requirement-decomposition.skill` | 标准技能包，支持 .skill 的运行时可直接安装 |
+| `job-company-insights.skill` | 标准技能包，支持 .skill 的运行时可直接安装 |
 | `智能体系统提示词.txt` | **粘贴到智能体"系统提示词/角色设定"栏**（聊天型 AI 用） |
 | `JD需求拆解-HTML模板-知识库上传版.txt` | **上传到智能体知识库**（AI 按它原样输出版式） |
 | `模板样例Demo-知识库上传版.txt` | 上传到知识库（AI 参考成品效果，可选） |
@@ -23,7 +23,7 @@
 
 ## 二、编程型 Agent（原生安装 .skill / 技能文件夹，零改动）
 
-解压 `jd-requirement-decomposition.skill`，把其中的 `jd-requirement-decomposition/` 文件夹放进对应目录；
+解压 `job-company-insights.skill`，把其中的 `job-company-insights/` 文件夹放进对应目录；
 或解压整个 `job-company-insights.zip`，把根目录（含 SKILL.md + references/ + assets/）整体放进对应目录：
 
 | 平台 | 安装目录 |
@@ -37,7 +37,7 @@
 | Windsurf / Cline / Roo Code / Kiro / Continue / Goose 等 | 各自 `skills/` 目录 |
 | 通用 | 项目根 `.agents/skills/` |
 
-安装后说「用 jd-requirement-decomposition 分析这个 JD」即可触发；Codex 也可用 `$jd-requirement-decomposition` 显式调用。
+安装后说「用 job-company-insights 分析这个 JD」即可触发；Codex 也可用 `$job-company-insights` 显式调用。
 
 ## 三、聊天型 AI（豆包 / Kimi / MiniMax / 通义 / ChatGPT）
 
@@ -73,7 +73,7 @@
 | 平台 | 类型 | 支持方式 | 本包用法 |
 |---|---|---|---|
 | WorkBuddy 桌面端 | 运行时 | **直接导入 zip** | SKILL.md 在压缩包根目录，一键导入，无需解压 |
-| WorkBuddy 网页 / CodeBuddy | 运行时 | .skill / skills/ 目录 | 安装 `jd-requirement-decomposition.skill`，或放 `~/.codebuddy/skills/` |
+| WorkBuddy 网页 / CodeBuddy | 运行时 | .skill / skills/ 目录 | 安装 `job-company-insights.skill`，或放 `~/.codebuddy/skills/` |
 | GitHub | 代码托管 | 仓库 + Release | 解压后文件夹直接作仓库提交（根目录 SKILL.md 即技能入口）；zip 作 Release 附件，无大小 / 格式限制 |
 | 小红书 Red Skill | 内容平台 | **上传知识物料** | 创作者服务平台 → Red Skill：把 `智能体系统提示词.txt` + `JD需求拆解-HTML模板-知识库上传版.txt` + Demo txt 作为素材上传，AI 结构化后可挂载到笔记（注意：Red Skill 吃的是知识物料，不是 .skill 格式） |
 | 小红书店铺智能体 | 电商 AI | 知识库上传 | 支持 TXT / MD / HTML / PDF / DOCX 等，单文件 ≤15MB，本包 txt 可直接传 |

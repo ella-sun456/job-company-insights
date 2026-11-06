@@ -1,7 +1,7 @@
-# JD 需求拆解生成 Skill — `jd-requirement-decomposition`
+# JD 需求拆解生成 Skill — `job-company-insights`
 
 > 一份**可直接分享给其他 AI Agent / 运行时**使用的面试调研技能说明。
-> 配套安装包：`jd-requirement-decomposition.skill`（标准技能包，可直接安装）。
+> 配套安装包：`job-company-insights.skill`（标准技能包，可直接安装）。
 
 ---
 
@@ -99,12 +99,12 @@
 ## 六、安装与使用
 
 ### 方式一：技能包安装（推荐）
-将 `jd-requirement-decomposition.skill` 交给支持该格式的 AI 运行时 / 技能市场直接安装。
+将 `job-company-insights.skill` 交给支持该格式的 AI 运行时 / 技能市场直接安装。
 
 ### 方式二：手动放置
 将技能目录放到用户级技能路径：
 ```
-~/.codebuddy/skills/jd-requirement-decomposition/
+~/.codebuddy/skills/job-company-insights/
 ├── SKILL.md
 ├── references/
 │   └── html-spec.md
