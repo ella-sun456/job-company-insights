@@ -837,16 +837,34 @@ function zoomJD(img){
 &lt;/html&gt;
 </code></pre></div><script>
 var FNAME = 'job-company-insights-skill-guide-en.html';
-function downloadHTML(){
-  var html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = FNAME;
-  a.rel = 'noopener';
+function __dlTrigger(href,name){
+  var a=document.createElement('a');
+  a.href=href;
+  a.download=name;
+  a.rel='noopener';
   document.body.appendChild(a);
   a.click();
-  setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} URL.revokeObjectURL(url); }, 4000);
+  setTimeout(function(){ try{document.body.removeChild(a);}catch(e){} },300);
+}
+function downloadHTML(){
+  var name='FNAME';
+  var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  var sandboxed=false;
+  try{ sandboxed=(window.self!==window.top)&&(!window.frameElement||window.frameElement.hasAttribute('sandbox')); }
+  catch(e){ sandboxed=(window.self!==window.top); }
+  var done=false;
+  if(!sandboxed){
+    try{
+      var url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+      __dlTrigger(url,name);
+      setTimeout(function(){ URL.revokeObjectURL(url); },4000);
+      done=true;
+    }catch(e){ done=false; }
+  }
+  if(!done){
+    try{ __dlTrigger('data:text/html;charset=utf-8,'+encodeURIComponent(html),name); done=true; }
+    catch(e2){ done=false; }
+  }
+  if(!done){ alert('⚠️ 当前环境拦截下载，请重新点击下载试试。'); }
 }
 </script></body></html>

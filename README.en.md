@@ -81,6 +81,8 @@ Platform entry points and troubleshooting: [docs/install.md](docs/install.md).
 
 **How to verify it installed**: in a fresh chat, say "Use job-company-insights to analyze this JD: …" — if the AI starts decoding the role and produces the report, it is installed.
 
+**Distribution**: the skill is platform-agnostic — grab it from GitHub or import via any link shared on channels like Xiaohongshu; the archive imports directly into any AI tool that supports skill packages (WorkBuddy, Claude, MiniMax Code, Trae, etc.), no per-platform adaptation needed.
+
 ## How to use it (what to send → what happens)
 
 One-liner template:

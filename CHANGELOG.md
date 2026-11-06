@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.2.3 · 2026-11-06
+
+**下载功能三级降级（按用户新需求重写）**
+- 按钮：上下各一个「📥 下载 HTML 报告」，共用同一套 `downloadHTML()` 逻辑，不新增备用按钮（原有结构保留）
+- 三级策略：优先 Blob 唤起浏览器原生下载 → 检测到沙箱 iframe（`window.self !== window.top` 且 frameElement 缺失或带 sandbox）自动降级 DataURL → 两级均抛异常时 `alert('⚠️ 当前环境拦截下载，请重新点击下载试试。')`
+- 除该失败 alert 外不新增任何弹窗 / 提示卡 / 二次确认
+- 全平台通用（WorkBuddy / MiniMax / Trae / Claude 等），纯浏览器行为，无平台适配
+- 同步范围：`assets/template.html`、`demo/report-demo.html`、`docs/skill-guide.html`、`docs/skill-guide-en.html`、`references/html-spec.md` Download 节、SKILL.md 红线 9、智能体提示词；安装包已重建
+- 自测：4 个文件下载函数 `new Function` 语法全过；按钮数（报告类 2、说明页 1）核对无误
+
+**分发说明（按用户需求）**
+- README（中/英）新增「分发」段：技能无平台绑定，GitHub 取包、小红书链接导入均可；压缩包可在所有支持包导入的 AI 工具（WorkBuddy、Claude、MiniMax Code、Trae 等）直接导入
+
 ## v1.2.2 · 2026-11-06
 
 **修复（对话里不再贴报告截图）**
