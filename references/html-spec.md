@@ -18,6 +18,36 @@ verbatim from `assets/template.html`; only fill content. No external dependencie
   - **JD + 简历都上传** → 直接输出百分制总分；并在「逐条匹配分析」下方渲染 **📊 综合匹配度维度拆解**（`经验 / 技能 / 行业认知 / 岗位层级` 四维度各给分，权重合计 100），列适配点（绿框）与差距点（红框）；不反问。
   - **只有 JD、没有简历** → 卡片显示「待评估」，不做任何匹配度评分；涉及个人对比的维度拆解/简历依据列/适配差距点统一标 `待补充` / `待评估`；系统先用大白话反问是否补简历（见 SKILL.md 约束 7）。
 
+## Language（报告语言）
+
+报告语言 = 用户提问语言（英文提问 → 全英文报告；中文提问 → 中文报告）；用户显式要求时以要求为准；无法判断时以 JD 原文语言为准。**除专有名词/公司名/文件路径外不混排。**
+
+英文报告时，模块标题按下表替换（其余版式、颜色、结构完全一致）：
+
+| 中文标题 | English title |
+|---|---|
+| JD 需求拆解全景报告 | JD & Company Insight Report |
+| JD 透视与匹配 | JD Decoding & Fit |
+| 深度调研看板 | Company Research Dashboard |
+| JD 原文与来源 | JD Text & Source |
+| 资深 HR 视角五问 | Five Questions a Senior HR Would Ask |
+| 目标人才画像 | Target Persona |
+| JD 逐条解码 | Line-by-line JD Decode |
+| 逐条匹配分析 | Requirement-by-requirement Fit |
+| 综合匹配度维度拆解 | Fit Score Breakdown |
+| 适配点 / 差距点 | Strengths / Gaps |
+| 定制自我介绍 | Tailored Self-intro |
+| 公司基本面 | Company Fundamentals |
+| 创始人画像 | Founder Profile |
+| 商业模式 | Business Model |
+| 产品与业务线 | Products & Business Lines |
+| 竞品矩阵 | Competitor Matrix |
+| 隐藏需求与岗位差异 | Unstated Needs & Role Variance |
+| 结论建议 | Verdict |
+| ⤓ 保存 / 下载 HTML | ⤓ Save / download HTML |
+| 待补充 / 待评估 | To be added / Not assessed |
+| 事实·工商 / 推测 | Fact · registry / Inference |
+
 ## Title
 
 `<h1>` = `【公司名称】 - 【岗位名称】JD 需求拆解全景报告`. No serial numbers, no `()`/`（）`.
