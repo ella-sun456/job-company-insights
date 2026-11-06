@@ -82,3 +82,17 @@
 | 豆包 / Kimi / MiniMax / 通义 / ChatGPT | 聊天型 | 智能体 + 知识库 | 系统提示词 + 知识库 txt（见第三节） |
 
 结论：**GitHub 与全部编程型 Agent 完全兼容；小红书走 Red Skill / 店铺智能体的知识物料路线；聊天型 AI 走智能体 + 知识库路线。** 一个包覆盖所有通道，无需为任何平台单独打包。
+
+---
+
+## 六、更新 / 升级已安装的技能
+
+技能本身**没有自更新通道**：它在你本地是一份文件副本，不会自己联网拉新版。更新只有三条路：
+
+1. **桌面端（推荐）**：到 [Releases](https://github.com/ella-sun456/job-company-insights/releases/latest) 下载最新的 `job-company-insights.zip`，重新导入；同名技能会被覆盖，分析与版式规范随之更新。
+2. **编程型 Agent**：如果当初是 `git clone`，在技能目录里 `git pull` 即可；如果是手动拷进 `~/.claude/skills/` 等目录，就重新拷 `SKILL.md` + `references/` + `assets/` 三个路径。
+3. **聊天型 AI**：把新的 `智能体系统提示词.txt` 重新贴进系统提示词，并用新的知识库模板文件替换旧文件（旧文件要删掉，避免两个模板同时命中）。
+
+**怎么确认自己装的是哪一版**：`SKILL.md` 顶部标有版本号（如 `v1.1.2`），仓库 [CHANGELOG.md](../CHANGELOG.md) 记录每版改了什么。版本号一致即已是最新。
+
+**只更新模板、不更新技能**的说法：如果只是报告版式变了，也可以对它说「按 GitHub 仓库里 `assets/template.html` 的最新版输出」，把模板内容贴给它即可，不必重装。

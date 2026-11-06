@@ -56,6 +56,8 @@ Not keyword parroting — recruiter view (five HR questions, intent decoding, ta
 
 Platform entry points and troubleshooting: [docs/install.md](docs/install.md).
 
+**Updating**: the skill is a local copy and never self-updates. Grab the latest zip from [Releases](https://github.com/ella-sun456/job-company-insights/releases/latest) and import it again to overwrite; `git clone` users can simply `git pull`. The version is printed at the top of `SKILL.md`.
+
 ## Usage
 
 ```

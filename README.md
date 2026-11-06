@@ -56,6 +56,8 @@
 
 平台入口与排查见 [docs/install.md](docs/install.md)。
 
+**更新**：技能是本地文件副本、不会自更新。到 [Releases](https://github.com/ella-sun456/job-company-insights/releases/latest) 下载最新 zip 重新导入即可覆盖；`git clone` 的用户直接 `git pull`。装的是哪一版看 `SKILL.md` 顶部版本号。
+
 ## 用法
 
 ```
