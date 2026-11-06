@@ -116,4 +116,4 @@ The generated report opens in any browser; the bottom-right button downloads the
 
 This project grew out of studying publicly shared AI-skill patterns, job-analysis methods and company-research case studies. Some early references can no longer be traced to their authors or links; they will be added as they are verified — open an issue and it will be credited immediately.
 
-Release history: [CHANGELOG.md](CHANGELOG.md). Current version **v1.2.0**.
+Release history: [CHANGELOG.md](CHANGELOG.md). Current version **v1.2.4**.
