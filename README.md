@@ -25,7 +25,7 @@ GitHub **does not render HTML** — clicking a `.html` file shows raw source. Th
 |---|---|
 | Project homepage (cover, flow, 6 screenshots, benefits) | **[▶ Open homepage](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/index.html)** |
 | Full demo report (two tabs, switchable, downloadable) | **[▶ Open demo report](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/demo/report-demo.html)** |
-| Skill guide (principles, modules, install) | **[▶ Open skill guide](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/docs/skill-guide.html)** |
+| Skill guide (principles, modules, install) | **[▶ Open skill guide](https://htmlpreview.github.io/?https://github.com/ella-sun456/job-company-insights/blob/main/docs/skill-guide-en.html)** |
 
 > If a page looks empty, wait a few seconds and refresh once (the renderer is occasionally slow). Or download the file and double-click it — identical result.
 
@@ -149,7 +149,8 @@ job-company-insights/
 │   ├── report-demo.html          # Redacted sample report
 │   └── README.md                 # Demo notes + screenshots
 ├── docs/
-│   ├── skill-guide.html          # Web version of the guide
+│   ├── skill-guide.html          # Web version of the guide (中文)
+│   ├── skill-guide-en.html       # Web version of the guide (English)
 │   ├── skill-guide.md            # Full guide (inline template included)
 │   └── install.md                # Cross-platform install guide
 └── install/

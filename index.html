@@ -49,6 +49,10 @@ html[data-lang="zh"] .zh{display:inline}
 .hero-zh{display:none}
 html[data-lang="zh"] .hero-en{display:none}
 html[data-lang="zh"] .hero-zh{display:block}
+/* 说明页按钮随语言指向中/英版本 */
+.guide-zh{display:none}
+html[data-lang="zh"] .guide-en{display:none}
+html[data-lang="zh"] .guide-zh{display:inline-block}
 </style>
 </head>
 <body>
@@ -77,7 +81,8 @@ html[data-lang="zh"] .hero-zh{display:block}
 
   <div class="btns">
     <a class="btn primary" href="demo/report-demo.html"><span class="en">Open the full demo report ↗</span><span class="zh">打开完整 Demo 报告 ↗</span></a>
-    <a class="btn ghost" href="docs/skill-guide.html"><span class="en">How the skill works ↗</span><span class="zh">技能说明与原理 ↗</span></a>
+    <a class="btn ghost guide-en" href="docs/skill-guide-en.html">How the skill works ↗</a>
+    <a class="btn ghost guide-zh" href="docs/skill-guide.html">技能说明与原理 ↗</a>
   </div>
 
   <h2><span class="en">What it does</span><span class="zh">它在做什么</span></h2>
